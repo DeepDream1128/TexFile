@@ -1,22 +1,5 @@
 \documentclass[12pt, a4paper, oneside]{ctexbook}
-\usepackage{amsmath, amsthm, amssymb, bm, graphicx, hyperref, mathrsfs, verbatim,tikz}
-\usepackage{makecell}
-\usepackage{longtable}
-\usepackage{xcolor}
-\usepackage{tcolorbox}
-\usepackage{soul}
-\usepackage{adjustbox}
-\usepackage{tcolorbox}
-\usepackage{enumerate}
-\usepackage{pdfpages}
-\usepackage{float}
-\usepackage{colortbl}
-\usepackage{tabularx}
-\usepackage{multirow}
-\usepackage{pgfplots}
-\usepackage{underscore}
-\usepackage{listings}
-\usepackage{minted}
+\usepackage{amsmath, amsthm, amssymb, bm, graphicx, hyperref, mathrsfs, verbatim,tikz, makecell, longtable, xcolor, tcolorbox, soul, adjustbox, enumerate, pdfpages, float, colortbl, tabularx, multirow, pgfplots, underscore, listings, minted}
 \numberwithin{figure}{section}
 \title{{\Huge{\textbf{嵌入式开发}}}}
 \author{Boyuan Zhao}
@@ -532,7 +515,7 @@ pid_t waitpid(pid_t pid, int *status, int options);
 \end{verbatim}
 
 
-\section{例程:wait_list.c}
+\subsection{例程: wait_list.c}
 
 该例程主要演示了如何创建子进程，然后通过父进程等待子进程的退出。
 
@@ -775,22 +758,7 @@ union semun {
 int init_sem(int sem_id, int init_value) {
     union semun sem_union;
     sem_union.val = init_value;  // 设置信号量初始值
-    // 设置信号量的值
-    if (semctl(sem_id, 0, SETVAL, sem_union) == -1) {
-        perror("sem init");  // 输出错误信息
-        exit(-1);            // 退出程序
-    }
-    return 0;
-}
-// 删除信号量
-int del_sem(int sem_id) {
-    union semun sem_union;
-    // 删除信号量
-    if (semctl(sem_id, 0, IPC_RMID, sem_union) == -1) {
-        perror("sem delete");  // 输出错误信息
-        exit(-1);              // 退出程序
-    }
-    return 0;
+    // 设置信号量的值h
 }
 // P操作（等待）
 int sem_p(int sem_id) {
@@ -865,6 +833,477 @@ int main(){
         exit(0);  // 父进程正常退出，返回状态0。
     }
     return 0;  // 程序正常结束。
+}
+
+\end{minted}
+
+\subsection{例程：shm_test.c}
+这段代码展示了使用共享内存进行进程间通信的例子,使用共享内存实现了父子进程之间的通信。父进程创建了一个共享内存，然后等待用户输入一条消息，并将该消息复制到共享内存中。子进程在一定延迟后附加到共享内存并读取其中的数据。父子进程都在最后分离共享内存，父进程删除共享内存。
+
+\begin{minted}{c}
+#include <stdio.h>   // 提供基本的输入输出功能。
+#include <stdlib.h>  // 提供了一些通用函数，如内存管理，程序的退出等。
+#include <string.h>  // 提供了一些字符串处理函数。
+#include <sys/types.h>  // 提供了一些基本类型的定义。
+#include <unistd.h>  // 提供对POSIX操作系统API的访问，如文件处理和进程管理。
+#include <sys/ipc.h>  // 提供了一些与IPC相关的函数和数据结构。
+#include <sys/shm.h>  // 提供了共享内存相关的函数和数据结构。
+
+#define DELAY_TIME 10  // 定义延迟时间，单位为秒。
+#define SIZE 2048  // 定义共享内存的大小。
+
+int main(){
+    pid_t pid;  // 定义进程ID。
+    int shmid;  // 定义共享内存ID。
+    char *shm_addr;  // 定义共享内存的起始地址。
+    char buff[SIZE];  // 定义缓冲区用于存储数据。
+
+    // 创建共享内存
+    if ((shmid = shmget(IPC_PRIVATE, SIZE, 0666)) < 0) {
+        perror("shmget");  // 输出错误信息
+        exit(-1);  // 退出程序
+    } else {
+        printf("Create shared memory: %d.\n", shmid);  // 输出共享内存的ID
+    }
+
+    // 创建子进程
+    if ((pid = fork()) < 0) {
+        perror("fork");  // 输出错误信息
+        exit(1);  // 退出程序
+    } else if (pid == 0) {
+        sleep(DELAY_TIME);  // 子进程暂停一段时间
+
+        printf("1.In child process:\n");
+        // 将共享内存附加到子进程的地址空间
+        if ((shm_addr = shmat(shmid, 0, 0)) == (void*)-1) {
+            perror("shmat");  // 输出错误信息
+            exit(-1);  // 退出程序
+        }
+
+        strcpy(buff, shm_addr);  // 将共享内存中的数据复制到缓冲区
+        printf("Child receive: %s\n", buff);  // 输出子进程接收到的数据
+
+        // 分离共享内存
+        if (shmdt(shm_addr) < 0) {
+            perror("shmdt");  // 输出错误信息
+            exit(-1);  // 退出程序
+        }
+        exit(0);  // 子进程正常退出，返回状态0。
+    } else {
+        printf("In parent process:\n");
+        // 将共享内存附加到父进程的地址空间
+        if ((shm_addr = shmat(shmid, 0, 0)) == (void*)-1) {
+            perror("shmat");  // 输出错误信息
+            exit(-1);  // 退出程序
+        }
+
+        printf("\nInput msg:\n");
+        fgets(buff, SIZE, stdin);  // 从标准输入读取数据到缓冲区
+        strncpy(shm_addr, buff, strlen(buff));  // 将缓冲区的数据复制到共享内存
+
+        // 分离共享内存
+        if (shmdt(shm_addr) < 0) {
+            perror("shmdt");  // 输出错误信息
+            exit(-1);  // 退出程序
+        }
+
+        waitpid(pid, NULL, 0);  // 等待子进程结束
+
+        // 删除共享内存
+        if (shmctl(shmid, IPC_RMID, NULL) == -1) {
+            perror("shmctl");  // 输出错误信息
+            exit(-1);  // 退出程序
+        }
+
+        exit(0);  // 父进程正常退出，返回状态0。
+    }
+
+    return 0;  // 程序正常结束。
+}
+
+\end{minted}
+
+\section{Linux多线程编程}
+
+\subsection{线程概述}
+
+\subsubsection{进程与线程}
+进程是系统中程序执行和资源分配的基本单位。每个进程都有自己的数据段、代码段和堆栈段。在进行切换时，需要有比较复杂的上下文切换。
+
+线程减少处理机的空转时间，支持多处理器以及减少上下文切换开销, 比创建进程小很多。线程是进程内独立的一条运行路线，是处理器调度的最小单元，也称为轻量级进程。线程可以对进程的内存空间和资源进行访问，并与同一进程中的其他线程共享线程。线程相关的执行状态和存储变量放在线程控制表内。一个进程可以有多个线程，有多个线程控制表及堆栈寄存器，共享一个用户地址空间。
+
+\subsubsection{线程标识}
+线程ID是一个重要的概念，每个线程都有一个唯一的线程ID。进程ID在整个系统中是唯一的，而线程ID只在它所属的进程环境中有效。
+
+\begin{itemize}
+    \item 函数: pthread\_self() 
+
+    原型: \texttt{pthread\_t pthread\_self(void);} 
+
+    参数: 无
+
+    返回值: 调用线程的线程ID
+
+    \item 函数: pthread\_equal() 
+
+    原型: \texttt{int pthread\_equal(pthread\_t t1, pthread\_t t2);} 
+
+    参数: t1, t2 -- 需要比较的两个线程ID
+
+    返回值: 如果两个线程ID相等，则返回非零值，否则返回0
+\end{itemize}
+
+\subsection{线程编程}
+
+\subsubsection{创建线程}
+线程创建后，就开始运行相关的线程函数。创建线程我们一般使用pthread_create()函数。
+
+\subsubsection{退出线程}
+在线程函数运行完后，该线程也就退出了。或者我们也可以使用pthread_exit()函数主动使线程退出。需要注意的是，我们不能使用exit()函数，因为它会使调用进程终止，导致所有线程都终止。
+
+\subsubsection{等待线程}
+由于一个进程中的多个线程是共享数据段的，通常在线程退出之后，退出线程所占用的资源并不会随着线程的终止而得到释放。我们通常使用pthread_join()函数来等待线程的结束。这个函数会将调用线程挂起，直到被等待的线程结束为止。函数返回时，被等待线程的资源就被收回。
+
+\subsubsection{取消线程}
+在一些情况下，我们可能需要在一个线程中终止另一个线程，我们可以使用pthread_cancel()函数来完成这个操作。被取消的线程可以设置自己的取消状态，决定是接受还是忽略这个取消请求。
+
+\begin{itemize}
+    \item 函数: pthread\_create() 
+
+    原型: \texttt{int pthread\_create(pthread\_t *thread, const pthread\_attr\_t *attr, void *(*start\_routine) (void *), void *arg);}
+
+    参数: thread -- 新线程的标识符指针；attr -- 线程属性设置，通常置为NULL表示使用默认属性；start\_routine -- 线程函数起始地址；arg -- 传给线程函数的参数
+
+    返回值: 成功时返回0，错误时返回错误号
+
+    \item 函数: pthread\_exit()
+
+    原型: \texttt{void pthread\_exit(void *retval);}
+
+    参数: retval -- 线程的返回值
+
+    返回值: 无
+
+    \item 函数: pthread\_join()
+
+    原型: \texttt{int pthread\_join(pthread\_t thread, void **retval);}
+
+    参数: thread -- 被等待的线程标识符；retval -- 用户定义的指针，用来存储被等待线程的返回值
+
+    返回值: 成功时返回0，错误时返回错误号
+
+    \item 函数: pthread\_cancel()
+
+    原型: \texttt{int pthread\_cancel(pthread\_t thread);}
+
+    参数: thread -- 被取消的线程标识符
+
+    返回值: 成功时返回0，错误时返回错误号
+\end{itemize}
+\subsection{线程同步与互斥}
+
+线程共享进程的资源和地址空间，对这些资源进行操作时，必须考虑线程间同步与互斥问题。通常我们有三种线程同步机制：互斥锁，信号量和条件变量。互斥锁更适合同时可用的资源是惟一的情况，而信号量更适合同时可用的资源为多个的情况。
+
+\subsubsection{互斥锁}
+互斥锁用简单的加锁方法控制对共享资源的原子操作。只有两种状态: 上锁、解锁。我们可以把互斥锁看作某种意义上的全局变量。在同一时刻只能有一个线程掌握某个互斥锁，拥有上锁状态的线程能够对共享资源进行操作。如果其他线程希望上锁一个已经被上锁的互斥锁，那么该线程就会挂起，直到上锁的线程释放掉互斥锁为止。互斥锁保证让每个线程对共享资源按顺序进行原子操作。
+
+\subsubsection{信号量}
+信号量是操作系统中所用到的PV原子操作，广泛用于进程或线程间的同步与互斥。信号量本质上是一个非负的整数计数器，被用来控制对公共资源的访问。一次P操作使信号量减一，而一次V操作使信号量加一。进程（或线程）根据信号量的值来判断是否对公共资源具有访问权限。当信号量的值大于等于零时，该进程（或线程）具有公共资源的访问权限。当信号量的值小于零时，该进程（或线程）就将阻塞直到信号量的值大于等于0为止。PV操作主要用于线程间的同步和互斥。如果需要实现互斥，几个线程只设置一个信号量；如果需要实现同步，会设置多个信号量，安排不同初值来实现它们之间的顺序执行。
+
+信号量相关的函数有：
+\begin{itemize}
+    \item 函数: sem\_init(sem\_t *sem, int pshared, unsigned int value) 
+
+    创建一个信号量，并初始化它。第一个参数是指向信号量对象的指针，第二个参数指示信号量是在进程内部还是进程间共享，第三个参数是信号量的初始值。
+
+    \item 函数: sem\_wait(sem\_t *sem) 和 sem\_trywait(sem\_t *sem)
+
+    这两个函数都是用于P操作，在信号量大于零时将信号量的值减一。若信号量小于零时，sem\_wait()将会阻塞线程，sem\_trywait()则会立即返回。
+
+    \item 函数: sem\_post(sem\_t *sem)
+
+    用于V操作，将信号量的值加一同时发出信号来唤醒等待的线程。
+
+    \item 函数: sem\_getvalue(sem\_t *sem, int *valp)
+
+    用于获取信号量的值，将信号量的当前值放入valp指向的整数中。
+
+    \item 函数: sem\_destroy(sem\_t *sem)
+
+    用于删除信号量，使信号量失效并释放其占用的系统资源。
+\end{itemize}
+
+
+\subsection{线程技术发展}
+在Linux 2.2内核中，不存在真正意义上的线程。Linux 2.4内核消除了线程个数的限制，允许动态地调整进程数上限。在Linux 内核2.6之前，进程是最主要的处理调度单元，并没支持内核线程机制。Linux 2.6内核实现了共享地址空间的进程机制，在1996年第一次获得线程的支持。
+
+为了改善LinuxThread问题，根据新内核机制重新编写线程库，改善Linux对线程的支持。由IBM主导的新一代POSIX线程库（Next Generation POSIX Threads，简称为NGPT）项目在2002年启动。为了避免出现有多个Linux线程标准，在2003年停止该项目。由Red Hat主导的本地化POSIX线程库 (Native POSIX Thread Library，简称为NTPL) 最早在Red Hat Linux9中被支持。现在已经成为GNU C函数库的一部分，同时也成为Linux线程的标准.
+
+\subsection{例程：thread_sem.c}
+这是一个使用 POSIX 线程（pthreads）和信号量（semaphores）来同步线程执行的 C 语言程序
+
+\begin{minted}{c}
+#include <stdio.h>     //包含了基础的输入输出函数，比如printf
+#include <stdlib.h>    //包含了一些标准库函数，比如exit和rand
+#include <pthread.h>   //包含了pthread库，用于多线程编程
+#include <semaphore.h> //包含了信号量操作的函数
+                       //比如sem_init, sem_wait和sem_post
+
+#define NUM 3          //定义了常量NUM，表示线程数
+#define JOBS 5         //定义了常量JOBS，表示每个线程执行的任务数
+#define DELAY 5        //定义了常量DELAY，表示任务延迟的最大值
+
+sem_t sem[NUM];        //声明了一个信号量数组，用于线程间的同步
+
+//这是每个线程要执行的函数
+void *thrd_func(void *arg){
+    long int seq = (long int)arg;   //获取线程序号
+    int delay_time =0;
+    int i;
+
+    sem_wait(&sem[seq]);            //线程在开始执行前等待对应的信号量
+
+    printf("Thread %d is running.\n",seq);   //打印线程开始执行的信息   
+    
+    //模拟线程执行JOBS次任务
+    for(i=0;i<JOBS;i++){
+        delay_time = (int)(DELAY*(rand()/(double)RAND_MAX))+1;   //随机生成延迟时间
+        sleep(delay_time);                                       //模拟任务执行延迟
+        printf("\tThread %d, job:%d, delay:%d.\n",seq, i,delay_time);   //打印任务执行信息
+    }
+
+    printf("Thread %d finished.\n",seq);   //打印线程完成的信息
+    
+    sem_post(&sem[(seq+NUM-1)%NUM]);       //线程执行完毕后，释放前一个线程的信号量
+    return 0;
+}
+
+int main(){
+    pthread_t tid[NUM];      //声明一个线程ID数组，用于存储每个线程的ID
+    long int no;
+    int i;
+
+    srand((int)time(0));     //初始化随机数生成器
+
+    sem_init(&sem[0],0,0);   //初始化信号量，设置初始值为0
+    sem_init(&sem[1],0,0);   
+    sem_init(&sem[2],0,1);   //初始化信号量，设置初始值为1
+
+    //创建NUM个线程
+    for(no=0;no<NUM;no++){    
+        if (pthread_create(&tid[no], NULL, thrd_func, (void*)no) !=0 ){   
+            perror("pthread create");   //打印创建线程失败的错误信息
+            exit(-1);                   //创建线程失败时退出程序
+        }
+        printf("Create thead %d.\n",no);   //打印创建线程的信息
+    }
+
+    //等待所有线程执行完毕
+    for(no=0;no<NUM;no++){    
+        if (pthread_join(tid[no],NULL)!=0){
+            perror("pthread exit");    //打印线程退出失败的错误信息
+            exit(-1);                  //线程退出失败时退出程序
+        }
+    }
+    
+    //销毁信号量
+    for(i=0;i<NUM;i++)
+        sem_destroy(&sem[i]);   
+
+    return 0;
+}
+
+\end{minted}
+
+\section{综合实例}
+
+\subsection{例程：shared\_memory.c}
+该程序创建了一个子进程，父进程和子进程之间通过共享内存和信号量进行通信。父进程从终端读取用户输入的数据，然后将数据拷贝到共享内存中，然后释放信号量sem_1。子进程等待信号量sem_1，当sem_1的值大于0时，子进程将共享内存中的数据拷贝到本地缓冲区，并打印接收到的数据，然后释放信号量sem_2。父进程再次等待信号量sem_2，当sem_2的值大于0时，父进程删除共享内存段和信号量，并等待子进程退出，最后父进程退出。
+
+\begin{minted}{c}
+#include <stdio.h>          //包含了基础的输入输出函数，比如printf
+#include <stdlib.h>         //包含了一些标准库函数，比如exit
+#include <string.h>         //包含了一些字符串处理函数，比如strcpy和strlen
+#include <sys/types.h>      //包含了一些系统调用的数据类型定义，比如pid_t
+#include <unistd.h>         //包含了一些系统调用函数，比如fork和getpid
+#include <sys/ipc.h>        //包含了一些共享内存和信号量的相关定义，比如IPC_PRIVATE
+#include <sys/shm.h>        //包含了一些共享内存操作函数，比如shmget和shmat
+#include "sem_com.c"        //包含了信号量操作的函数，比如create_sem和sem_p
+
+#define SIZE 2048           //定义共享内存的大小
+
+int main(){
+    pid_t pid;
+    int shmid;
+    char *shm_addr;
+    int sem_1,sem_2;
+    char buff[SIZE];
+
+    sem_1= create_sem('a');     //创建信号量sem_1
+    sem_2= create_sem('b');     //创建信号量sem_2
+    init_sem(sem_1,0);          //初始化信号量sem_1为0，表示初始状态下不可用
+    init_sem(sem_2,1);          //初始化信号量sem_2为1，表示初始状态下可用
+
+    shmid=shmget(IPC_PRIVATE, SIZE, 0666);    //创建共享内存段，返回共享内存的标识符
+    printf("Create shared memory: %d.\n",shmid);
+
+
+    if ((pid=fork())<0){        //创建子进程
+        perror("fork");         //打印fork失败的错误信息
+        exit(1);                //fork失败时退出程序
+    }else if (pid==0){          //子进程执行以下代码
+        printf("In child process:\n");
+
+        sem_p(sem_1);           //等待信号量sem_1，如果sem_1的值大于0，则减1并继续执行，否则阻塞等待
+        shm_addr=shmat(shmid,0,0);   //将共享内存连接到子进程的地址空间中
+
+        strcpy(buff,shm_addr);       //将共享内存中的数据拷贝到本地缓冲区
+        printf("Child receive:%s\n",buff);   //打印接收到的数据
+
+        shmdt(shm_addr);             //将共享内存从子进程的地址空间中分离
+        sem_v(sem_2);                //释放信号量sem_2，将其值加1
+
+        exit(0);                     //子进程退出
+    }else{                          //父进程执行以下代码
+        printf("In parent process:\n");
+        
+        sem_p(sem_2);                //等待信号量sem_2，如果sem_2的值大于0，则减1并继续执行，否则阻塞等待
+        shm_addr=shmat(shmid,0,0);    //将共享内存连接到父进程的地址空间中
+
+        printf("\nInput msg:\n");    
+        fgets(buff,SIZE,stdin);      //从终端读取用户输入的数据
+        strncpy(shm_addr,buff,strlen(buff));   //将数据拷贝到共享内存中
+
+        shmdt(shm_addr);             //将共享内存从父进程的地址空间中分离
+
+        sem_v(sem_1);                //释放信号量sem_1，将其值加1
+
+        waitpid(pid,NULL,0);         //等待子进程退出
+
+        shmctl(shmid,IPC_RMID,NULL); //删除共享内存段
+
+        del_sem(sem_1);              //删除信号量sem_1
+        del_sem(sem_2);              //删除信号量sem_2
+
+        exit(0);                     //父进程退出
+    }
+
+    return 0;
+}
+
+\end{minted}
+
+\subsection{例程：producer\_consumer.c}
+该程序模拟了生产者消费者问题。生产者线程生产数据项并将其放入一个缓冲区中，消费者线程从缓冲区中取出数据项进行消费。缓冲区是一个固定大小的数组，使用循环队列的方式实现。生产者和消费者之间通过信号量进行同步，保证生产者在缓冲区未满时才能生产数据，消费者在缓冲区非空时才能消费数据。
+
+具体流程如下：
+
+\begin{itemize}
+    \item 主函数创建了一个生产者线程和一个消费者线程。
+    \item 初始化互斥信号量\texttt{lock}为1，表示互斥访问缓冲区的锁。
+    \item 初始化生产者信号量\texttt{sem\_p}为缓冲区的大小\texttt{SIZE}，表示生产者可生产的空闲位置数。
+    \item 初始化消费者信号量\texttt{sem\_c}为0，表示初始状态下缓冲区没有可消费的数据。
+    \item 生产者线程不断循环生产数据项：
+    \begin{itemize}
+        \item 等待生产者信号量\texttt{sem\_p}，确保有可用的空闲位置。
+        \item 申请互斥锁\texttt{lock}，保护对缓冲区的互斥访问。
+        \item 打印当前生产的数据项。
+        \item 将数据项放入缓冲区，并更新写索引。
+        \item 释放互斥锁\texttt{lock}。
+        \item 增加消费者信号量\texttt{sem\_c}，表示有可消费的数据。
+        \item 休眠2秒，模拟生产过程的耗时。
+    \end{itemize}
+    \item 消费者线程不断循环消费数据项：
+    \begin{itemize}
+        \item 等待消费者信号量\texttt{sem\_c}，确保有可消费的数据。
+        \item 申请互斥锁\texttt{lock}，保护对缓冲区的互斥访问。
+        \item 从缓冲区读取数据项，并清空读取位置。
+        \item 更新读索引。
+        \item 打印当前消费的数据项。
+        \item 释放互斥锁\texttt{lock}。
+        \item 增加生产者信号量\texttt{sem\_p}，表示有可生产的空闲位置。
+        \item 休眠1秒，模拟消费过程的耗时。
+    \end{itemize}
+    \item 主函数使用\texttt{pthread\_join}等待生产者和消费者线程退出。
+    \item 销毁信号量，释放资源。
+\end{itemize}
+
+\begin{minted}{c}
+#include <stdio.h>     //包含了基础的输入输出函数，比如printf
+#include <stdlib.h>    //包含了一些标准库函数，比如exit和rand
+#include <string.h>    //包含了一些字符串处理函数，比如memset
+#include <pthread.h>   //包含了pthread库，用于多线程编程
+#include <semaphore.h> //包含了信号量操作的函数，
+                       //比如sem_init, sem_wait和sem_post
+
+#define SIZE 5          //定义了缓冲区的大小
+
+int buf[SIZE];          //声明了一个缓冲区数组
+int write_index = 0;    //写索引
+int read_index = 0;     //读索引
+int idx = 0;            //数据项的值
+sem_t lock;             //互斥信号量，用于保护对缓冲区的互斥访问
+sem_t sem_c, sem_p;     //信号量，用于控制生产者和消费者之间的同步
+
+//生产者线程函数
+void *produce(void *arg){
+    while(1){
+        sem_wait(&sem_p);       //等待生产者信号量
+        sem_wait(&lock);        //申请互斥访问缓冲区的锁
+        
+        printf("Produce: %d\n",idx);   //打印当前生产的数据项
+        buf[write_index] = idx;        //将数据项放入缓冲区
+        idx++;                         //递增数据项的值
+        
+        write_index = (write_index+1)%SIZE;   //更新写索引
+
+        sem_post(&lock);               //释放缓冲区的互斥锁
+        sem_post(&sem_c);              //增加消费者信号量       
+        sleep(2);                      //休眠2秒，模拟生产过程的耗时
+    }    
+   
+    return 0;
+}
+
+//消费者线程函数
+void *consume(void *arg){
+    int data;
+
+    while(1){
+        sem_wait(&sem_c);      //等待消费者信号量
+        sem_wait(&lock);       //申请互斥访问缓冲区的锁
+        
+        data = buf[read_index];      //从缓冲区读取数据项
+        buf[read_index] = -1;        //将读取的位置清空
+        read_index = (read_index+1)%SIZE;   //更新读索引
+        printf("Consume: %d\n",data);   //打印当前消费的数据项
+
+        sem_post(&lock);               //释放缓冲区的互斥锁
+        sem_post(&sem_p);              //增加生产者信号量       
+        sleep(1);                      //休眠1秒，模拟消费过程的耗时
+    }    
+   
+    return 0;
+}
+
+int main(){
+    pthread_t con,pros;       //声明消费者线程和生产者线程的ID
+
+    sem_init(&lock,0,1);      //初始化互斥信号量，设置初始值为1
+    sem_init(&sem_p,0,SIZE);  //初始化生产者信号量，设置初始值为SIZE
+    sem_init(&sem_c,0,0);     //初始化消费者信号量，设置初始值为0
+    
+    pthread_create(&pros, NULL, produce, NULL);   //创建生产者线程
+    pthread_create(&con, NULL, consume, NULL);    //创建消费者线程
+
+    pthread_join(con,0);     //等待消费者线程退出
+    pthread_join(pros,0);    //等待生产者线程退出
+
+    sem_destroy(&lock);      //销毁互斥信号量
+    sem_destroy(&sem_p);     //销毁生产者信号量
+    sem_destroy(&sem_c);     //销毁消费者信号量
+
+    return 0;
 }
 
 \end{minted}
