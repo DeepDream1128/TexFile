@@ -30,15 +30,59 @@
 \contentsline {subsubsection}{设置文件锁}{10}{subsubsection*.5}%
 \contentsline {subsubsection}{测试文件锁}{11}{subsubsection*.6}%
 \contentsline {subsubsection}{释放文件锁}{12}{subsubsection*.7}%
-\contentsline {section}{\numberline {2.5}标准I/O编程}{12}{section.2.5}%
-\contentsline {subsection}{\numberline {2.5.1}概述}{12}{subsection.2.5.1}%
-\contentsline {subsection}{\numberline {2.5.2}标准I/O函数}{13}{subsection.2.5.2}%
-\contentsline {subsubsection}{读函数}{13}{subsubsection*.8}%
-\contentsline {subsubsection}{写函数}{13}{subsubsection*.9}%
-\contentsline {subsection}{\numberline {2.5.3}缓冲}{13}{subsection.2.5.3}%
-\contentsline {subsubsection}{全缓冲}{13}{subsubsection*.10}%
-\contentsline {subsubsection}{行缓冲}{13}{subsubsection*.11}%
-\contentsline {subsubsection}{不带缓冲}{14}{subsubsection*.12}%
-\contentsline {subsection}{\numberline {2.5.4}文件定位}{14}{subsection.2.5.4}%
-\contentsline {subsection}{\numberline {2.5.5}错误处理}{14}{subsection.2.5.5}%
-\contentsline {section}{\numberline {2.6}例程:copyfile.c}{14}{section.2.6}%
+\contentsline {subsection}{\numberline {2.4.7}例程:copyfile.c}{12}{subsection.2.4.7}%
+\contentsline {section}{\numberline {2.5}标准I/O编程}{14}{section.2.5}%
+\contentsline {subsection}{\numberline {2.5.1}概述}{14}{subsection.2.5.1}%
+\contentsline {subsection}{\numberline {2.5.2}标准I/O函数}{15}{subsection.2.5.2}%
+\contentsline {subsubsection}{读函数}{15}{subsubsection*.8}%
+\contentsline {subsubsection}{写函数}{15}{subsubsection*.9}%
+\contentsline {subsection}{\numberline {2.5.3}缓冲}{15}{subsection.2.5.3}%
+\contentsline {subsubsection}{全缓冲}{15}{subsubsection*.10}%
+\contentsline {subsubsection}{行缓冲}{15}{subsubsection*.11}%
+\contentsline {subsubsection}{不带缓冲}{16}{subsubsection*.12}%
+\contentsline {subsection}{\numberline {2.5.4}文件定位}{16}{subsection.2.5.4}%
+\contentsline {subsection}{\numberline {2.5.5}错误处理}{16}{subsection.2.5.5}%
+\contentsline {section}{\numberline {2.6}Linux进程概述}{16}{section.2.6}%
+\contentsline {subsection}{\numberline {2.6.1}进程的概念与结构}{16}{subsection.2.6.1}%
+\contentsline {subsubsection}{程序/进程}{16}{subsubsection*.13}%
+\contentsline {subsubsection}{进程控制块PCB}{16}{subsubsection*.14}%
+\contentsline {subsubsection}{进程标识}{17}{subsubsection*.15}%
+\contentsline {subsubsection}{其他参数}{17}{subsubsection*.16}%
+\contentsline {subsection}{\numberline {2.6.2}进程的状态}{17}{subsection.2.6.2}%
+\contentsline {subsubsection}{就绪态}{17}{subsubsection*.17}%
+\contentsline {subsubsection}{执行态}{17}{subsubsection*.18}%
+\contentsline {subsubsection}{等待态}{17}{subsubsection*.19}%
+\contentsline {subsubsection}{暂停态}{18}{subsubsection*.20}%
+\contentsline {subsubsection}{僵尸态}{18}{subsubsection*.21}%
+\contentsline {subsection}{\numberline {2.6.3}进程地址空间}{18}{subsection.2.6.3}%
+\contentsline {subsubsection}{数据段}{18}{subsubsection*.22}%
+\contentsline {subsubsection}{代码段}{18}{subsubsection*.23}%
+\contentsline {subsubsection}{堆栈段}{19}{subsubsection*.24}%
+\contentsline {subsection}{\numberline {2.6.4}进程管理}{19}{subsection.2.6.4}%
+\contentsline {subsubsection}{启动进程}{19}{subsubsection*.25}%
+\contentsline {subsubsection}{调度进程}{20}{subsubsection*.26}%
+\contentsline {subsection}{\numberline {2.6.5}进程控制}{20}{subsection.2.6.5}%
+\contentsline {subsubsection}{创建新进程：fork()函数}{20}{subsubsection*.27}%
+\contentsline {subsubsection}{查询子进程是否终止：wait和waitpid函数}{21}{subsubsection*.28}%
+\contentsline {section}{\numberline {2.7}例程:wait_list.c}{21}{section.2.7}%
+\contentsline {subsection}{\numberline {2.7.1}特殊进程}{23}{subsection.2.7.1}%
+\contentsline {subsubsection}{孤儿进程}{23}{subsubsection*.29}%
+\contentsline {subsubsection}{僵尸进程}{23}{subsubsection*.30}%
+\contentsline {section}{\numberline {2.8}进程间通信编程}{24}{section.2.8}%
+\contentsline {subsection}{\numberline {2.8.1}Linux进程间通信概述}{24}{subsection.2.8.1}%
+\contentsline {subsubsection}{管道}{24}{subsubsection*.31}%
+\contentsline {subsubsection}{信号量}{24}{subsubsection*.32}%
+\contentsline {subsubsection}{共享内存}{24}{subsubsection*.33}%
+\contentsline {subsection}{\numberline {2.8.2}管道}{24}{subsection.2.8.2}%
+\contentsline {subsubsection}{创建管道}{25}{subsubsection*.34}%
+\contentsline {subsubsection}{父子进程之间的管道通信}{25}{subsubsection*.35}%
+\contentsline {subsubsection}{有名管道}{25}{subsubsection*.36}%
+\contentsline {subsubsection}{阻塞与非阻塞操作}{26}{subsubsection*.37}%
+\contentsline {subsection}{\numberline {2.8.3}信号量}{26}{subsection.2.8.3}%
+\contentsline {subsubsection}{semget()函数定义：}{27}{subsubsection*.38}%
+\contentsline {subsubsection}{semctl()函数定义：}{27}{subsubsection*.39}%
+\contentsline {subsubsection}{semop()函数定义：}{27}{subsubsection*.40}%
+\contentsline {subsection}{\numberline {2.8.4}共享内存}{28}{subsection.2.8.4}%
+\contentsline {subsubsection}{共享内存编程步骤}{28}{subsubsection*.41}%
+\contentsline {subsection}{\numberline {2.8.5}例程：sem_com.c}{30}{subsection.2.8.5}%
+\contentsline {subsection}{\numberline {2.8.6}例程：sem_2.c}{32}{subsection.2.8.6}%
