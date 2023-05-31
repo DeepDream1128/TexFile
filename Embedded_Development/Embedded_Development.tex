@@ -1,5 +1,5 @@
 \documentclass[12pt, a4paper, oneside]{ctexbook}
-\usepackage{amsmath, amsthm, amssymb, bm, graphicx, hyperref, mathrsfs, verbatim}
+\usepackage{amsmath, amsthm, amssymb, bm, graphicx, hyperref, mathrsfs, verbatim,tikz}
 \usepackage{makecell}
 \usepackage{longtable}
 \usepackage{xcolor}
@@ -175,8 +175,8 @@
 进程是Linux中的基本执行实体，它包含执行程序所需的所有资源，如CPU时间、内存空间等。每个进程都有一个唯一的进程ID，以及一套完整的系统资源，如打开的文件、挂起的信号、内部状态、优先级等。Linux支持多进程并发执行，因此可以在同一时间运行多个任务。
 \begin{figure}[H]
 \centering
- \resizebox{0.75\textwidth}{!}{\includegraphics{linux1.png}}
- \caption{}
+ \resizebox{0.75\textwidth}{!}{\includegraphics{./fig/linux1.png}}
+ \caption{系统调用流程}
  \label{}
 \end{figure}
 \subsection{进程间通信}
@@ -332,58 +332,8 @@ int fcntl(int fd, int cmd, struct flock *lock);
 
 文件锁对于控制多个进程对同一文件的并发访问非常有用，可以防止数据损坏或不一致性。
 
-\section{标准I/O编程}
 
-\subsection{概述}
-
-Linux标准I/O库提供了一组函数，用于读写流，这些函数比系统调用更易于使用。在C语言中，标准I/O库被包含在stdio.h头文件中。
-
-\subsection{标准I/O函数}
-
-\subsubsection{读函数}
-
-\begin{itemize}
-    \item \texttt{fgetc}: 从流中获取下一个字符。
-    \item \texttt{fgets}: 从流中获取下一行。
-    \item \texttt{fread}: 从流中读取数据。
-\end{itemize}
-
-\subsubsection{写函数}
-
-\begin{itemize}
-    \item \texttt{fputc}: 向流中写入一个字符。
-    \item \texttt{fputs}: 向流中写入一个字符串。
-    \item \texttt{fwrite}: 向流中写入数据。
-\end{itemize}
-
-\subsection{缓冲}
-
-标准I/O库使用缓冲来减少读写操作的数量。这意味着当你调用一个写函数时，数据可能不会立即写入磁盘，而是存储在缓冲区中，等待缓冲区满了或者你显式地刷新缓冲区。
-
-标准I/O提供3种类型的缓冲存储：
-
-\subsubsection{全缓冲}
-
-在这种阻塞I/O模型中，填满标准I/O缓存后才进行实际I/O操作。
-
-\subsubsection{行缓冲}
-
-这是一种非阻塞模型，在输入和输出中遇到行结束符时，标准I/O库执行I/O操作。
-
-\subsubsection{不带缓冲}
-
-相当于用系统调用write()函数将这些字符全写到被打开的文件上。例如，stderr是不带缓冲的。
-
-\subsection{文件定位}
-
-可以使用\texttt{fseek}、\texttt{ftell}和\texttt{rewind}函数来在流中更改和查询位置。
-
-\subsection{错误处理}
-
-如果一个标准I/O函数遇到错误，它会设置全局变量\texttt{errno}，你可以使用\texttt{perror}或\texttt{strerror}函数来获取错误信息。
-
-
-\section{例程:copyfile.c}
+\subsection{例程:copyfile.c}
 
 该程序复制源文件(src_file)的最后1024字节（或少于1024字节，如果源文件小于1024字节）到目标文件(dest_file)。
 
@@ -436,6 +386,489 @@ int main(){
 }
 
 \end{minted}
+\section{标准I/O编程}
+
+\subsection{概述}
+
+Linux标准I/O库提供了一组函数，用于读写流，这些函数比系统调用更易于使用。在C语言中，标准I/O库被包含在stdio.h头文件中。
+
+\subsection{标准I/O函数}
+
+\subsubsection{读函数}
+
+\begin{itemize}
+    \item \texttt{fgetc}: 从流中获取下一个字符。
+    \item \texttt{fgets}: 从流中获取下一行。
+    \item \texttt{fread}: 从流中读取数据。
+\end{itemize}
+
+\subsubsection{写函数}
+
+\begin{itemize}
+    \item \texttt{fputc}: 向流中写入一个字符。
+    \item \texttt{fputs}: 向流中写入一个字符串。
+    \item \texttt{fwrite}: 向流中写入数据。
+\end{itemize}
+
+\subsection{缓冲}
+
+标准I/O库使用缓冲来减少读写操作的数量。这意味着当你调用一个写函数时，数据可能不会立即写入磁盘，而是存储在缓冲区中，等待缓冲区满了或者你显式地刷新缓冲区。
+
+标准I/O提供3种类型的缓冲存储：
+
+\subsubsection{全缓冲}
+
+在这种阻塞I/O模型中，填满标准I/O缓存后才进行实际I/O操作。
+
+\subsubsection{行缓冲}
+
+这是一种非阻塞模型，在输入和输出中遇到行结束符时，标准I/O库执行I/O操作。
+
+\subsubsection{不带缓冲}
+
+相当于用系统调用write()函数将这些字符全写到被打开的文件上。例如，stderr是不带缓冲的。
+
+\subsection{文件定位}
+
+可以使用\texttt{fseek}、\texttt{ftell}和\texttt{rewind}函数来在流中更改和查询位置。
+
+\subsection{错误处理}
+
+如果一个标准I/O函数遇到错误，它会设置全局变量\texttt{errno}，你可以使用\texttt{perror}或\texttt{strerror}函数来获取错误信息。
+
+\section{Linux进程概述}
+
+\subsection{进程的概念与结构}
+在Linux中，进程是一个运行的程序实例，具有自己的地址空间和状态。它的行为由进程控制块（Process Control Block，PCB）控制，其中包含了进程标识、状态、用户标识、资源利用情况等信息。
+
+\subsubsection{程序/进程}
+程序是一组指示计算机执行特定任务的指令，而进程则是程序的一个活动实例。程序只是硬盘上的一组指令，而进程则包括程序的代码、当前状态和运行时的数据。
+
+\subsubsection{进程控制块PCB}
+进程控制块（PCB）是用于存储进程相关信息的数据结构。这些信息包括：进程标识、程序计数器、CPU寄存器、CPU调度信息、内存管理信息、进程的状态等。
+
+\subsubsection{进程标识}
+进程标识包括进程号（PID，Process Identity Number）和父进程号（PPID，parent process ID）。PID和PPID都是非零的正整数，它们可以唯一地标识一个进程。在Linux中，可以使用系统调用函数getpid()和getppid()来获取当前进程的PID和PPID。
+
+\subsubsection{其他参数}
+PCB中还包含其他一些参数，如：用户/用户组标识，进程时间，资源利用情况等。
+
+\subsection{进程的状态}
+一个进程在其生命周期中可能会有几种状态，包括就绪态、执行态、等待态、暂停态、僵尸态。
+
+\subsubsection{就绪态}
+在就绪态下，进程具备执行的一切条件，正在等待分配CPU的处理时间片。
+
+\subsubsection{执行态}
+在执行态下，进程正在运行，即进程正在占用CPU。
+
+\subsubsection{等待态}
+在等待态下，进程不能使用CPU，若等待事件发生（等待的资源分配到）则可将其唤醒。
+
+\subsubsection{暂停态}
+在暂停态下，进程暂停执行，通常是因为收到了一个信号。
+
+\subsubsection{僵尸态}
+僵尸进程是已经终止，但其父进程还没有获取其终止状态的进程。在Linux中，僵尸进程无法被杀死，因为它已经"死亡"，只是其退出状态还未被父进程读取。
+
+\begin{figure}[H]
+\centering
+ \resizebox{0.75\textwidth}{!}{\includegraphics{./fig/process1.png}}
+ \caption{Linux进程状态转换图}
+ \label{}
+\end{figure}
+
+\subsection{进程地址空间}
+进程之间具有并行性，互不干扰，每个进程运行在独立的虚拟地址空间。这个地址空间主要分为三个段：数据段，代码段和堆栈段。
+
+\subsubsection{数据段}
+数据段用于存放进程运行中需要的数据。它进一步分为两个部分：普通数据段和BSS数据段。普通数据段存放静态初始化的全局变量或常量，而BSS数据段存放未初始化的全局变量。
+
+\subsubsection{代码段}
+代码段包含进程执行的机器指令。
+
+\subsubsection{堆栈段}
+堆栈段是进程中动态分配的内存区域，通常用于存放局部变量和程序调用的返回地址。
+
+\begin{figure}[H]
+\centering
+ \resizebox{0.5\textwidth}{!}{\includegraphics{./fig/process2.png}}
+ \caption{进程地址空间}
+ \label{}
+\end{figure}
+
+\subsection{进程管理}
+进程的管理涵盖了进程的启动、调度和中断等方面的操作。
+
+\subsubsection{启动进程}
+进程可以通过以下方式启动：
+\begin{itemize}
+    \item 手工启动：用户可以手动启动一个进程，这可以分为前台启动和后台启动。前台启动的进程会占用控制台，而后台启动的进程则不会。后台启动一般用于进程耗时长，或者用户不急于获得结果的情况。
+    \item 调度启动：系统也可以根据用户的设置或事先的调度安排自行启动进程。
+\end{itemize}
+
+\subsubsection{调度进程}
+进程调度是操作系统的核心功能之一。它负责决定哪个进程能够获得CPU的使用权，以及进程何时可以从一个状态转换到另一个状态。通过进程调度，我们可以实现对进程的中断操作，改变进程的优先级，以及查看进程的状态等。
+
+\subsection{进程控制}
+进程的创建、管理和终止都在进程控制部分完成。下面我们将详细地介绍这些操作。
+
+\subsubsection{创建新进程：fork()函数}
+在Linux中，创建新的进程通常使用fork()函数。它从当前进程（被称为父进程）创建一个新的进程（被称为子进程）。子进程是父进程的复制品，它继承了父进程的地址空间，包括数据空间、堆和栈的副本。但是，子进程有自己的进程号、资源使用和计时器等。
+
+子进程和父进程的执行是并行的，从fork()函数的返回开始，它们分别在各自的地址空间中运行。通过检查fork()函数的返回值，可以判断是在父进程中还是在子进程中。在父进程中，返回值是子进程的进程号，而在子进程中，返回值是0。
+
+\subsubsection{查询子进程是否终止：wait和waitpid函数}
+当进程正常或异常终止时，内核会向其父进程发送SIGCHLD信号。父进程可以调用wait或waitpid函数来查询其子进程是否已经终止。
+
+wait函数使父进程阻塞，直到一个子进程结束。如果子进程已经结束，wait函数将立即返回。
+
+waitpid函数与wait函数的作用相同，但是它提供了一些额外的功能。首先，它提供了一个非阻塞的版本的wait函数。其次，它并不一定要等待第一个结束的子进程，它可以等待一个特定的子进程。
+
+\begin{verbatim}
+pid_t fork(void);
+pid_t wait(int *status);
+pid_t waitpid(pid_t pid, int *status, int options);
+\end{verbatim}
+
+
+\section{例程:wait_list.c}
+
+该例程主要演示了如何创建子进程，然后通过父进程等待子进程的退出。
+
+\begin{minted}{c}
+#include <stdio.h>   // 提供基本的输入输出功能。
+#include <stdlib.h>  // 提供了一些通用函数，如内存管理，程序的退出等。
+#include <sys/types.h> // 为了使用pid_t类型。
+#include <unistd.h>  // 提供对POSIX操作系统API的访问，如文件处理和进程管理。
+#include <sys/wait.h> // 提供进程等待的函数。
+
+int main(){
+    pid_t pid,pw;  // 定义进程ID。
+    int status;  // 定义子进程的状态。
+
+    // 创建新的进程。fork函数返回两次：一次在父进程中，返回子进程的PID；一次在子进程中，返回0。
+    if ((pid=fork())<0){
+        // 如果创建进程失败，输出错误信息并退出程序。
+        perror("fork");
+        exit(-1);
+    }else if (pid==0){
+        // 子进程的代码。
+        printf("In child process: %d\n",getpid());  // 输出子进程的PID。
+        sleep(5);  // 使子进程暂停5秒。
+        exit(1);  // 子进程退出，返回状态1。
+    }else{
+        // 父进程的代码。
+        printf("In parent process:\n");  // 输出父进程的提示信息。
+        do{
+            // 使用非阻塞方式等待子进程的结束。如果子进程没有结束，返回0。
+            pw=waitpid(pid,&status,WNOHANG);
+            if (pw==0){
+                // 如果子进程还没有结束，输出提示信息并暂停1秒。
+                printf("No child exit.\n");
+                sleep(1);
+            }
+        }while(pw==0);  // 如果子进程还没有结束，继续等待。
+
+        // 当子进程结束时，输出子进程的PID和退出状态。
+        printf("Child %d exit, exit status:%d.\n",pw,WEXITSTATUS(status));
+    }
+
+    return 0;  // 程序正常结束。
+}
+\end{minted}
+
+\subsection{特殊进程}
+\subsubsection{孤儿进程}
+孤儿进程是父进程先退出，而它的一个或多个子进程还在运行时产生的。这些子进程将成为孤儿进程。为了保证子进程能找到一个新的父亲，孤儿进程将被init进程（进程号为1）所收养，并由init进程对它们完成状态收集工作。孤儿进程不会额外占用系统资源。
+
+\begin{figure}[h]
+    \centering
+    \begin{tikzpicture}
+        % Nodes
+        \node[draw] (parent) at (0,0) {父进程};
+        \node[draw] (child) at (4,0) {子进程};
+        \node[draw] (orphan) at (4,-2) {孤儿进程};
+        \node[draw] (init) at (8,-2) {init进程};
+        
+        % Arrows
+        \draw[->] (parent) -- node[above] {导致} (child);
+        \draw[->] (child) -- node[left]{转为}(orphan);
+        \draw[->] (orphan) -- node[above]{回收}(init);
+    \end{tikzpicture}
+    \caption{孤儿进程}
+    \end{figure}
+
+\subsubsection{僵尸进程}
+僵尸进程是子进程比父进程先结束，而父进程没有回收子进程时产生的。僵尸进程仅仅在进程列表中保留一个位置，记载该进程的退出状态等信息供其他进程收集，除此之外不再占有任何内存空间。然而，系统所能使用的进程号是有限的，如果大量的产生僵尸进程，将因为没有可用的进程号而导致系统不能产生新的进程。父进程可以通过wait或waitpid函数来等待子进程结束，以此清除僵尸进程。
+
+流程图：父进程 --> 子进程结束 --> 产生僵尸进程 --> 父进程使用wait/waitpid函数 --> 清除僵尸进程
+
+\section{进程间通信编程}
+
+\subsection{Linux进程间通信概述}
+在Linux系统中，进程可以使用多种方法进行通信，以实现数据的传递和同步。下面是一些常用的Linux进程间通信机制：
+
+\subsubsection{管道}
+管道是一种简单而常见的进程间通信方式。在Linux中，管道可以分为无名管道和有名管道（FIFO）两种类型。无名管道只能用于具有亲缘关系的父子进程之间的通信，而有名管道允许不相关的进程之间进行通信。
+
+\subsubsection{信号量}
+信号量是一种用于进程间同步和互斥的机制。它基于一个计数器和一组操作，进程可以对信号量进行等待、增加或减少操作。信号量可以用于控制对共享资源的访问，以避免竞争条件和死锁。
+
+\subsubsection{共享内存}
+共享内存是一种高效的进程间通信机制，它允许多个进程共享同一块内存区域。这种共享内存区域可以被进程直接读取和写入，从而实现进程之间的快速数据交换。但是，由于没有内置的同步机制，进程必须使用其他方式来确保数据的一致性和互斥。
+
+\subsection{管道}
+管道是Linux中的一种进程间通信方式，主要用于具有亲缘关系的进程之间的通信。管道具有以下特点：
+\begin{itemize}
+    \item 管道是一种半双工通信模式。
+    \item 管道可以看作是一种特殊的文件，在内核的内存空间中创建和关闭。
+    \item 管道基于文件描述符，创建管道时会生成两个文件描述符fd[0]和fd[1]。
+    \item fd[0]用于读取管道，fd[1]用于写入管道。
+\end{itemize}
+
+\subsubsection{创建管道}
+使用pipe()函数可以创建一个管道，步骤如下：
+\begin{enumerate}
+    \item 调用pipe()函数创建管道。
+    \item 使用fork()函数创建子进程，该子进程会继承父进程所创建的管道。
+\end{enumerate}
+
+\subsubsection{父子进程之间的管道通信}
+在父子进程之间建立了管道后，可以通过关闭不相关的文件描述符来实现读写操作。这样，父子进程之间就建立起了一条“子进程写入父进程读取”的通道。
+
+\subsubsection{有名管道}
+有名管道（FIFO）用于使互不相关的两个进程彼此通信。以下是有名管道的一些特点：
+\begin{itemize}
+    \item 有名管道通过路径名在文件系统中可见。
+    \item 使用mkfifo()函数可以创建有名管道。
+    \item 有名管道遵循先进先出规则，读取操作总是从开始处返回数据，写入操作将数据添加到末尾。
+    \item 有名管道不支持像lseek()等文件定位操作。
+    \item 可以使用open()、read()和write()等函数对有名管道进行读写操作。
+\end{itemize}
+
+\subsubsection{阻塞与非阻塞操作}
+在管道的读写操作中，可能会出现阻塞的情况。可以使用阻塞和非阻塞的打开模式来控制管道的行为：
+\begin{itemize}
+    \item 对于读进程：
+    \begin{itemize}
+        \item 如果管道是阻塞打开且内部没有数据，则读进程将一直阻塞，直到有数据可读。
+        \item 如果管道是非阻塞打开，不论管道内是否有数据，读进程都会立即执行读操作，如果管道内没有数据，读函数将立即返回0。
+    \end{itemize}
+    \item 对于写进程：
+    \begin{itemize}
+        \item 如果管道是阻塞打开，写操作将一直阻塞，直到数据可以被写入。
+        \item 如果管道是非阻塞打开，写操作可能进行部分写入或调用失败，具体取决于管道的状态。
+    \end{itemize}
+\end{itemize}
+
+\subsection{信号量}
+在多个进程同时运行且彼此存在关联时，同步关系和互斥关系变得重要。这些关系的根源在于临界资源，即在同一时刻只允许有限个（通常只有一个）进程访问或修改的资源。临界资源可以是硬件资源（如处理器、内存、存储器和外围设备等），也可以是软件资源（如共享代码段、共享结构和变量等）。临界区本身也可以成为临界资源。
+
+信号量是一种用于解决进程之间同步和互斥的进程间通信（IPC）机制。它基于一个称为信号量的变量，该变量对应于某种资源，并取一个非负整数值。信号量的值表示当前可用的该资源数量，若值为0，则表示当前没有可用的资源。同时，等待该资源的进程会进入信号量的等待队列。
+
+信号量操作有两个原子操作，即P操作和V操作。P操作（也称为减操作）会使信号量的值减少，若减为负值，则当前进程会被阻塞。V操作（也称为增操作）会使信号量的值增加，若增加后的值大于0，则会唤醒等待队列中的某个进程。
+
+以下是使用信号量访问临界区的伪代码：
+\begin{verbatim}
+P(semaphore)          // 进入临界区之前的操作
+临界区操作
+V(semaphore)          // 离开临界区之后的操作
+\end{verbatim}
+
+最简单的信号量是二值信号量，即只能取0和1两种值。信号量的创建和操作可以通过以下函数实现：
+
+\subsubsection{semget()函数定义：}
+\begin{verbatim}
+#include <sys/types.h>
+#include <sys/ipc.h>
+#include <sys/sem.h>
+int semget(key_t key, int nsems, int semflg);
+\end{verbatim}
+\emph{返回值：成功时返回信号量标识符（非负整数），失败时返回-1。}
+
+\subsubsection{semctl()函数定义：}
+\begin{verbatim}
+#include <sys/types.h>
+#include <sys/ipc.h>
+#include <sys/sem.h>
+int semctl(int semid, int semnum, int cmd, ...);
+\end{verbatim}
+\emph{返回值：成功时返回操作的结果，失败时返回-1。}
+
+\subsubsection{semop()函数定义：}
+\begin{verbatim}
+#include <sys/types.h>
+#include <sys/ipc.h>
+#include <sys/sem.h>
+struct sembuf {
+    unsigned short sem_num;
+    short sem_op;
+    short sem_flg;
+};
+int semop(int semid, struct sembuf *sops, size_t nsops);
+\end{verbatim}
+\emph{返回值：成功时返回0，失败时返回-1。}
+
+\subsection{共享内存}
+共享内存是一种高效的进程间通信方式，它允许进程直接读写内存而无需进行数据的拷贝。以下是共享内存的相关概念和步骤：
+
+共享内存是为了在多个进程间交换信息而在内核中留出的一块内存区域。进程可以将这块内存映射到自己的私有地址空间中，从而直接读写该内存区域，提高了通信效率。
+
+多个进程共享同一段内存时，需要使用某种同步机制，例如互斥锁和信号量，来确保数据的一致性和互斥访问。
+
+\subsubsection{共享内存编程步骤}
+使用共享内存进行进程间通信的步骤如下：
+
+1. \textbf{创建共享内存}：使用shmget()函数从内核中获取一段共享内存区域。
+   \begin{itemize}
+       \item \textbf{函数原型}：int shmget(key_t key, size_t size, int shmflg);
+       \item \textbf{参数}：key为共享内存的键值，size为共享内存的大小，shmflg为创建共享内存的权限和标志。
+       \item \textbf{返回值}：返回共享内存的标识符（shmid）。
+   \end{itemize}
+   
+2. \textbf{映射共享内存}：使用shmat()函数将创建的共享内存映射到具体的进程地址空间中。
+   \begin{itemize}
+       \item \textbf{函数原型}：void *shmat(int shmid, const void *shmaddr, int shmflg);
+       \item \textbf{参数}：shmid为共享内存的标识符, shmaddr为映射到进程地址空间的地址, shmflg为映射共享内存的权限和标志。
+       \item \textbf{返回值}：返回共享内存的起始地址。
+   \end{itemize}
+
+3. \textbf{使用共享内存}：可以使用不带缓冲的I/O读写命令对共享内存进行操作。
+
+4. \textbf{撤销映射操作}：使用shmdt()函数将共享内存从当前进程的地址空间中撤销映射。
+   \begin{itemize}
+       \item \textbf{函数原型}：int shmdt(const void *shmaddr);
+       \item \textbf{参数}：shmaddr为共享内存的起始地址。
+       \item \textbf{返回值}：返回0表示成功，-1表示失败。
+   \end{itemize}
+
+5. \textbf{删除共享内存}：使用shmctl()函数删除共享内存。
+   \begin{itemize}
+       \item \textbf{函数原型}：int shmctl(int shmid, int cmd, struct shmid_ds *buf);
+       \item \textbf{参数}：shmid为共享内存的标识符，cmd为删除共享内存的命令，buf为用于存储共享内存信息的结构体指针。
+       \item \textbf{返回值}：返回0表示成功，-1表示失败。
+   \end{itemize}
+
+\subsection{例程：sem_com.c}
+这段代码定义了一些用于操作信号量的函数和一个用于存储信号量控制命令的联合类型 semun。
+
+这些函数用于操作信号量，其中：
+
+·init_sem 函数用于初始化信号量，并将初始值设置为 init_value。
+
+·del_sem 函数用于删除信号量。
+
+·sem_p 函数执行 P 操作（等待），将信号量的值减一。
+
+·sem_v 函数执行 V 操作（释放），将信号量的值加一。
+
+这些函数通过系统调用 semctl 和 semop 来进行信号量的控制操作，并使用 perror 函数输出错误信息并退出程序（使用 -1 表示错误）。
+
+\begin{minted}{c}
+union semun {
+    int val;                  // 信号量值
+    struct semid_ds *buf;     // IPC_STAT 和 IPC_SET 使用的缓冲区
+    unsigned short *array;    // GETALL 和 SETALL 使用的数组
+};
+// 初始化信号量
+int init_sem(int sem_id, int init_value) {
+    union semun sem_union;
+    sem_union.val = init_value;  // 设置信号量初始值
+    // 设置信号量的值
+    if (semctl(sem_id, 0, SETVAL, sem_union) == -1) {
+        perror("sem init");  // 输出错误信息
+        exit(-1);            // 退出程序
+    }
+    return 0;
+}
+// 删除信号量
+int del_sem(int sem_id) {
+    union semun sem_union;
+    // 删除信号量
+    if (semctl(sem_id, 0, IPC_RMID, sem_union) == -1) {
+        perror("sem delete");  // 输出错误信息
+        exit(-1);              // 退出程序
+    }
+    return 0;
+}
+// P操作（等待）
+int sem_p(int sem_id) {
+    struct sembuf sem_buf;
+    sem_buf.sem_num = 0;    // 信号量的编号（只有一个信号量时为0）
+    sem_buf.sem_op = -1;    // P操作的值为-1，表示等待
+    sem_buf.sem_flg = SEM_UNDO;  // 设置SEM_UNDO标志，保证进程终止时会释放占用的资源
+    // 执行P操作
+    if (semop(sem_id, &sem_buf, 1) == -1) {
+        perror("sem p");  // 输出错误信息
+        exit(-1);         // 退出程序
+    }
+    return 0;
+}
+// V操作（释放）
+int sem_v(int sem_id) {
+    struct sembuf sem_buf;
+    sem_buf.sem_num = 0;    // 信号量的编号（只有一个信号量时为0）
+    sem_buf.sem_op = 1;     // V操作的值为1，表示释放
+    sem_buf.sem_flg = SEM_UNDO;  // 设置SEM_UNDO标志，保证进程终止时会释放占用的资源
+    // 执行V操作
+    if (semop(sem_id, &sem_buf, 1) == -1) {
+        perror("sem v");  // 输出错误信息
+        exit(-1);         // 退出程序
+    }
+    return 0;
+}
+\end{minted}
+
+\subsection{例程：sem_2.c}
+这段代码展示了使用信号量实现进程间同步的例子。该程序创建了一个信号量，并使用信号量实现了父子进程之间的同步。父进程和子进程在关键位置执行P操作和V操作，保证了它们的顺序执行。父进程和子进程都在延迟后正常退出，并在最后删除了信号量。
+\begin{minted}{c}
+#include <stdio.h>   // 提供基本的输入输出功能。
+#include <stdlib.h>  // 提供了一些通用函数，如内存管理，程序的退出等。
+#include <unistd.h>  // 提供对POSIX操作系统API的访问，如文件处理和进程管理。
+#include <sys/sem.h> // 提供信号量相关的函数和数据结构。
+#include "sem_com.c"  // 引入信号量的初始化、删除、P操作和V操作函数的定义。
+#include <sys/types.h>  // 提供了一些基本类型的定义。
+#include <sys/ipc.h>  // 提供了一些与IPC相关的函数和数据结构。
+
+#define DELAY_TIME 3  // 定义延迟时间，单位为秒。
+
+int main(){
+    pid_t pid;  // 定义进程ID。
+    int sem_id;  // 定义信号量ID。
+    key_t sem_key;  // 定义信号量的键值。
+
+    sem_key = ftok(".", 'b');  // 使用当前目录和字符 'b' 生成信号量的键值。
+    if ((sem_id = semget(sem_key, 1, 0666|IPC_CREAT)) == -1) {
+        perror("sem get");  // 输出错误信息
+        exit(-1);  // 退出程序
+    }
+    init_sem(sem_id, 1);  // 初始化信号量，初始值为1。
+    if ((pid = fork()) < 0) {
+        perror("fork");  // 输出错误信息
+        exit(1);  // 退出程序
+    } else if (pid == 0) {
+        sem_p(sem_id);  // 执行P操作
+        printf("1.In child process:\n");  // 输出子进程的提示信息。
+        sleep(DELAY_TIME);  // 使子进程暂停指定的延迟时间。
+        printf("2.Child pid:%d\n", getpid());  // 输出子进程的PID。
+        sem_v(sem_id);  // 执行V操作
+        exit(0);  // 子进程正常退出，返回状态0。
+    } else {
+        sem_p(sem_id);  // 执行P操作
+        printf("3.In parent process:\n");  // 输出父进程的提示信息。
+        sleep(DELAY_TIME);  // 使父进程暂停指定的延迟时间。
+        printf("4.Parent pid:%d\n", getpid());  // 输出父进程的PID。
+        sem_v(sem_id);  // 执行V操作
+        waitpid(pid, 0, 0);  // 等待子进程结束
+        del_sem(sem_id);  // 删除信号量
+        exit(0);  // 父进程正常退出，返回状态0。
+    }
+    return 0;  // 程序正常结束。
+}
+
+\end{minted}
+
 
 
 \end{document}
