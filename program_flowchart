@@ -1,0 +1,27 @@
+// 程序流程图
+digraph {
+	node [shape=box]
+	A [label="开始"]
+	B [label="输入学校数量、男子团体项目数量和女子团体项目数量"]
+	C [label="输入各学校名称"]
+	D [label="输入项目名称、参与性别及名次取法"]
+	E [label="输入各项目名次及得分"]
+	F [label="计算并记录各学校总分、男女团体分"]
+	G [label="按学校编号排序并打印"]
+	H [label="按学校总分排序并打印"]
+	I [label="按男女团体总分排序并打印"]
+	J [label="查询学校某项目得分"]
+	K [label="查询项目前N名学校及得分"]
+	L [label="结束"]
+	A -> B
+	B -> C
+	C -> D
+	D -> E
+	E -> F
+	F -> G
+	G -> H
+	H -> I
+	I -> J
+	J -> K
+	K -> L
+}
