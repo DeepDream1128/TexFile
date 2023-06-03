@@ -1,0 +1,7 @@
+stm32基本性能和架构
+电路原理图
+Systick定时器
+NVIC三级中断
+GPIO，UART，SPI，IIC，DMA，外部中断，A/D，D/A
+spi flash访问
+固件库软件分层原理及移植：文件系统和Uip移植思路

@@ -1,5 +1,5 @@
 \documentclass[12pt, a4paper, oneside]{ctexbook}
-\usepackage{amsmath, amsthm, amssymb, bm, graphicx, hyperref, mathrsfs, verbatim,tikz, makecell, longtable, xcolor, tcolorbox, soul, adjustbox, enumerate, pdfpages, float, colortbl, tabularx, multirow, pgfplots, underscore, listings, minted}
+\usepackage{amsmath, amsthm, amssymb, bm, graphicx, hyperref, mathrsfs, verbatim,tikz, makecell, longtable, xcolor, tcolorbox, soul, adjustbox, enumerate, pdfpages, float, colortbl, tabularx, multirow, pgfplots, underscore, listings, minted, circuitikz}
 \numberwithin{figure}{section}
 \title{{\Huge{\textbf{嵌入式开发}}}}
 \author{Boyuan Zhao}
@@ -41,15 +41,42 @@
 \setcounter{page}{1}
 \pagenumbering{arabic}
 
+\chapter{嵌入式系统概述}
+\section{嵌入式技术概念}
+\textbf{狭义概念}：嵌入到对象体中的专用计算机系统
+
+\textbf{三要素}：嵌入、专用、计算机
+
+\textbf{嵌入式系统的特点}:由三要素引出:
+    \begin{enumerate}
+        \item 嵌入性：嵌入到对象体系中，有对象环境要求
+        \item 专用性：软、硬件按对象要求裁减
+        \item 计算机：实现对象的智能化功能
+    \end{enumerate}
+
+\textbf{广义概念}：一个嵌入式系统就是一个具有特定功能或用途的计算机软硬件集合体
+
+\textbf{标准定义}：以应用为中心、以计算机技术为基础、软件硬件可裁剪、适应应用系统对功能、可靠性、成本、体积、功耗严格要求的专用计算机系统 。
 \chapter{STM32开发}
+ 
 
-在这里可以输入笔记的内容. 
+\section{STM32 基本性能}
 
-\section{STM32的基本知识}
 
-这是笔记的正文部分. 
+\begin{itemize}
+    \item 内核：STM32 系列基于 ARM Cortex-M 内核，具有 32 位 RISC 架构，提供高性能和实时功能。
+    \item 时钟频率：STM32 的工作频率范围从 32 kHz（低功耗）到 480 MHz，满足高性能和低功耗的需求。
+    \item 内存：STM32 系列内置 Flash 存储器和 RAM，Flash 存储器从 16KB 到 2MB，RAM 从 6KB 到 1MB。
+    \item 外设：STM32 系列包括丰富的外设，例如 ADC、DAC、GPIO、I2C、SPI、USART、USB、CAN、SDIO、LCD、Camera interface、Ethernet、外部存储器接口等。
+\end{itemize}
 
-\clearpage
+\section{STM32 架构}
+
+STM32 的微控制器构架基于通用的 ARM Cortex-M 内核，该内核具有特定的硬件模块，例如中断控制器，系统滴答定时器和低功耗模式等。外设模块通过总线系统（AHB, APB1, APB2）连接到内核。每个 STM32 微控制器都有其独特的外设组合，包括通用输入/输出（GPIO）端口，定时器/计数器，ADC/DAC，通信接口等。
+
+\section{输入/输出端口}
+
+
 
 \chapter{Linux开发}
 
@@ -128,7 +155,7 @@
 
 \subsection{Vim操作}
 \begin{verbatim}
-    i:  Enter editing mode, insert at cursor.        # 进入编辑模式，在光标处插入。
+    i:  Enter editing mode, insert at cursor.        # 进入编辑模式
     x:  Delete a character.                          # 删除一个字符
     dd: Delete a line.                               # 删除一行
     ndd:Delete n lines.                              # 删除n行
@@ -338,7 +365,8 @@ int main(){
     // 以只读方式打开源文件。
     src_fd = open(SRC_FILE, O_RDONLY);
     // 以写入方式打开目标文件，如果文件不存在则创建，如果文件已存在则清空文件内容。
-    dest_fd = open(DEST_FILE, O_WRONLY|O_CREAT|O_TRUNC, S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH);
+    dest_fd = open(DEST_FILE, O_WRONLY|O_CREAT
+                   |O_TRUNC, S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH);
     // 检查文件是否正确打开。
     if (src_fd<0||dest_fd<0){
         // 如果打开文件失败，输出错误信息并退出程序。
@@ -1308,6 +1336,305 @@ int main(){
 
 \end{minted}
 
+\chapter{Android应用程序开发}
+\section{Java 基础 (类的扩展，声明和实例化，内部方法重写)}
+类的扩展（继承）是 Java 的一个基本概念。我们创建一个新的类时，可以从一个已存在的类继承属性和方法。例如：
 
+\begin{minted}{java}
+public class Animal {
+    public void eat() {
+        System.out.println("Eating...");
+    }
+}
+
+public class Dog extends Animal {
+    // 在这里，Dog 类继承了 Animal 类的所有属性和方法，例如 eat() 方法。
+    // 同时，我们可以在 Dog 类中添加新的方法或者重写从 Animal 类继承的方法。
+    
+    @Override
+    public void eat() {
+        System.out.println("Dog is eating...");
+    }
+}
+
+\end{minted}
+
+\section{安卓项目结构}
+一个标准的 Android 项目包括以下基本结构：
+\begin{enumerate}
+    \item \textbf{\textit{app/src/main/java}}：包含应用的源代码 (.java 或 .kt 文件)
+    \item \textbf{\textit{app/src/main/res}}：包含所有的资源文件，例如图片（res/drawable），布局（res/layout），值（res/values）等等
+    \item \textbf{\textit{app/src/main/AndroidManifest.xml}}：Android 应用的配置文件，包含了应用需要的权限声明，注册的 Activity，Service 等信息
+    \item \textbf{\textit{app/build.gradle}}：包含应用的编译配置信息，例如 target SDK version，dependencies 等
+\end{enumerate}
+
+\section{线性布局，相对布局的使用}
+在 Android 中，你可以使用不同类型的布局来安排界面元素。比如：
+\begin{enumerate}
+    \item \textbf{\textit{线性布局（LinearLayout）}}：将元素按照垂直或者水平方向排列。
+    \item \textbf{\textit{相对布局（RelativeLayout）}}：可以指定元素相对于其他元素或者父元素的位置
+\end{enumerate}
+
+\textbf{\textit{LinearLayout}} 的示例：
+\begin{minted}[frame=lines,linenos,mathescape]{xml}
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Text 1"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Text 2"/>
+
+</LinearLayout>
+
+
+
+
+\end{minted}
+
+\textbf{\textit{RelativeLayout}} 的示例：
+\begin{minted}[frame=lines,linenos,mathescape]{xml}
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Text 1"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Text 2"
+        android:layout_below="@id/textView1"/>
+
+</RelativeLayout>
+
+\end{minted}
+\section{TextView、Button 和 EditText的静态和动态使用}
+\subsection{静态使用}
+\begin{minted}[frame=lines,linenos,mathescape]{xml}
+<TextView
+    android:id="@+id/textView"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Hello World!" />
+
+<Button
+    android:id="@+id/button"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Click me" />
+
+<EditText
+    android:id="@+id/editText"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:hint="Enter something" />
+
+
+
+\end{minted}
+
+\subsection{动态使用}
+\begin{minted}[frame=lines,linenos,mathescape]{java}
+LinearLayout layout = findViewById(R.id.layout);
+
+TextView textView = new TextView(this);
+textView.setText("Hello World!");
+layout.addView(textView);
+
+Button button = new Button(this);
+button.setText("Click me");
+layout.addView(button);
+
+EditText editText = new EditText(this);
+editText.setHint("Enter something");
+layout.addView(editText);
+
+
+
+\end{minted}
+
+\section{Activity}
+Activity 的生命周期主要包含以下几个阶段：onCreate(), onStart(), onResume(), onPause(), onStop(), onDestroy()。
+
+以下是一个使用 Intent 携带数据跳转 Activity 的示例：
+
+\begin{minted}[frame=lines,linenos,mathescape]{java}
+Intent intent = new Intent(this, SecondActivity.class);
+intent.putExtra("key", "value");
+startActivity(intent);
+
+\end{minted}
+
+在 SecondActivity 中，你可以通过以下方式获取数据：
+
+\begin{minted}[frame=lines,linenos,mathescape]{java}
+String value = getIntent().getStringExtra("key");
+\end{minted}
+
+\section{Service、IntentService}
+\subsection{Service}
+Service 是一个在后台运行的组件，可以执行长时间运行的操作。Service 分为两种类型：Started 和 Bound。
+
+以下是启动一个普通的 Service 的示例：
+\begin{minted}[frame=lines,linenos,mathescape]{java}
+Intent intent = new Intent(this, MyService.class);
+startService(intent);
+
+\end{minted}
+
+\subsection{IntentService}
+IntentService 是 Service 的一个子类，它使用工作线程来处理所有启动请求。如果你不需要 Service 与其他组件交互，或者想要在服务完成后自动停止，那么可以使用 IntentService。
+
+以下是启动一个 IntentService 的示例：
+
+\begin{minted}[frame=lines,linenos,mathescape]{java}
+Intent intent = new Intent(this, MyIntentService.class);
+startService(intent);
+
+\end{minted}
+
+\section{广播接收器 BroadcastReceiver}
+
+以下是创建一个 BroadcastReceiver 的示例：
+\begin{minted}[frame=lines,linenos,mathescape]{java}
+public class MyBroadcastReceiver extends BroadcastReceiver {
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        // 这里处理接收到的广播
+    }
+}
+
+\end{minted}
+然后在 AndroidManifest.xml 文件中注册：
+\begin{minted}[frame=lines,linenos,mathescape]{xml}
+<receiver android:name=".MyBroadcastReceiver">
+    <intent-filter>
+        <action android:name="com.example.MY_ACTION" />
+    </intent-filter>
+</receiver>
+
+\end{minted}
+
+发送广播的示例：
+\begin{minted}[frame=lines,linenos,mathescape]{java}
+Intent intent = new Intent();
+intent.setAction("com.example.MY_ACTION");
+sendBroadcast(intent);
+
+\end{minted}
+
+\section{SQLite 数据库的增、删、改、查}
+在 Android 中，SQLite 是一种轻量级的数据库，我们通常使用 SQLiteOpenHelper 类来管理数据库的创建和版本管理。
+
+以下是一个简单的示例：
+\begin{minted}[frame=lines,linenos,mathescape]{java}
+public class MyDatabaseHelper extends SQLiteOpenHelper {
+    private static final String DB_NAME = "SampleDB";
+    private static final int DB_VERSION = 1;
+    
+    public MyDatabaseHelper(Context context) {
+        super(context, DB_NAME, null, DB_VERSION);
+    }
+
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        String CREATE_TABLE = "CREATE TABLE MyTable 
+                               (id INTEGER PRIMARY KEY, name TEXT)";
+        db.execSQL(CREATE_TABLE);
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, 
+                          int newVersion) {
+        // 如果数据库需要升级，你可以在这里处理
+    }
+}
+
+\end{minted}
+
+然后，你可以像下面这样使用这个数据库：
+
+\begin{minted}[frame=lines,linenos,mathescape]{java}
+MyDatabaseHelper dbHelper = new MyDatabaseHelper(this);
+SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+// 插入数据
+ContentValues values = new ContentValues();
+values.put("id", 1);
+values.put("name", "Tom");
+db.insert("MyTable", null, values);
+
+// 查询数据
+Cursor cursor = db.query("MyTable", null, null, 
+                                    null, null, null, null);
+
+// 更新数据
+ContentValues values = new ContentValues();
+values.put("name", "Jerry");
+db.update("MyTable", values, "id = ?", new String[] {"1"});
+
+// 删除数据
+db.delete("MyTable", "id = ?", new String[] {"1"});
+
+\end{minted}
+
+\section{基于文件流的文件读写}
+
+以下是写入和读取文件的示例：
+
+\begin{minted}[frame=lines,linenos,mathescape]{java}
+// 写入文件
+FileOutputStream fos = openFileOutput("myFile.txt", Context.MODE_PRIVATE);
+fos.write("Hello World!".getBytes());
+fos.close();
+
+// 读取文件
+FileInputStream fis = openFileInput("myFile.txt");
+BufferedReader reader = new BufferedReader(
+                        new InputStreamReader(fis));
+String line = reader.readLine();
+reader.close();
+
+\end{minted}
+
+\section{访问内置传感器}
+以下是如何访问加速度计的示例：
+\begin{minted}[frame=lines,linenos,mathescape]{java}
+SensorManager sensorManager = (SensorManager) getSystemService(
+                                Context.SENSOR_SERVICE);
+Sensor accelerometer = sensorManager.getDefaultSensor(
+                            Sensor.TYPE_ACCELEROMETER);
+
+SensorEventListener listener = new SensorEventListener() {
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        float x = event.values[0];
+        float y = event.values[1];
+        float z = event.values[2];
+        // 这里处理加速度数据
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        // 这里处理传感器精度改变
+    }
+};
+
+sensorManager.registerListener(listener, accelerometer, 
+                               SensorManager.SENSOR_DELAY_NORMAL);
+
+\end{minted}
 
 \end{document}

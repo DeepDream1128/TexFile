@@ -1,0 +1,9 @@
+java基础（类的扩展，声明和实例化，内部方法重写）；
+安卓项目结构；线性布局，相对布局的使用；
+3个基础控件的静态和动态使用；
+activity的生命周期，使用Intent携带数据跳转activity；
+startservice方法启动的一般service、intent service，其特点及使用；
+广播接收器broadcastreceiver（设置广播监听，设置接收器事件，发送广播）；
+基于sqliteopenhelper的sqlite数据库的增、删、改、查；
+基于文件流的文件读写；
+访问内置传感器、使用timer和handler进行定期数据采集和界面更新。
