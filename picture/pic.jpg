@@ -1,0 +1,15 @@
+// Code Structure
+digraph {
+	A [label="Global Variables and Maze Initialization"]
+	B [label="isValidMove Function"]
+	C [label="chooseAction Function"]
+	D [label="updateQValues Function"]
+	E [label="qLearning Function"]
+	F [label="main Function"]
+	A -> F
+	F -> E
+	E -> C
+	E -> D
+	C -> B
+	D -> B
+}
