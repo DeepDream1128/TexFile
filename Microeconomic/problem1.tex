@@ -1,0 +1,121 @@
+\documentclass[UTF8,titlepage]{article}
+\usepackage{amsmath,amssymb,amsthm,amsfonts,amscd}
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\usepackage{graphicx}
+\usepackage{titlesec}
+\usepackage{makecell}
+\usepackage{longtable}
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\usepackage{soul}
+\usepackage{adjustbox}
+\usepackage{tcolorbox}
+\usepackage{enumerate}
+\usepackage{pdfpages}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{pgfplots}
+\numberwithin{figure}{section}
+\usepackage[left=1.25in,right=1.25in,%
+top=1in,bottom=1in]{geometry}
+\usepackage{color}
+\titleformat{\section}
+  {\raggedright\LARGE\bfseries}{\thesection}{1em}{}
+\title{Answer for Problem Set 1}
+\author{Boyuan Zhao}
+\begin{document}
+\begin{center}
+    {\LARGE \textbf{Answer of Problem Set 1}}\\  % 这就是你的标题
+    {\normalsize Boyuan Zhao}\\  % 这就是你的名字
+    {\small \today}  % 这是日期
+\end{center}
+
+\section{Problem 1. Univariate unconstrained maximization.}
+\begin{enumerate}
+    \item The first order condition for this problem is given by setting the derivative of the function with respect to $x$ equal to zero:
+
+    \[\frac{df}{dx} = -2(x - x_0) \exp(-(x - x_0)^2) = 0\]
+
+    \item Solving the above equation gives us the value of $x$ that maximizes $f(x; x_0)$:
+    \[x^* = x_0\]
+
+    \item The second order condition is given by the second derivative of the function with respect to $x$:
+    \[\frac{d^2f}{dx^2} = -2 \exp(-(x - x_0)^2) + 4(x - x_0)^2 \exp(-(x - x_0)^2)\]
+
+    If we substitute $x^* = x_0$ into this equation, we get:
+    \[\frac{d^2f}{dx^2}\Big|_{x=x^*} = -2\]
+
+    This is a negative value, which implies that $x^* = x_0$ is a maximum, as expected.
+
+    \item As $x^* = x_0$, we have $\frac{dx^*}{dx_0} = 1$
+    
+    \item If we plug in $x^* = x_0$ into the function $f$, and then take the derivative with respect to $x_0$, we get:
+    \[\frac{df}{dx_0} = \frac{d}{dx_0}\exp(0) = 0\]
+
+    By the envelope theorem, the derivative of the value function with respect to $x_0$ is also 0, which is consistent with the above result.
+
+    \item As shown above, the second derivative of $f$ with respect to $x$ is:
+    \[\frac{d^2f}{dx^2} = -2 \exp(-(x - x_0)^2) + 4(x - x_0)^2 \exp(-(x - x_0)^2)\]
+    
+    As this function is not always negative (for example, when $x = x_0$ it equals $-2$, but when $x \neq x_0$ it could be positive), it indicates that the function $f$ is not concave in $x$.
+\end{enumerate}
+
+\clearpage
+\section{Problem 2. Multivariate unconstrained maximization.}
+\begin{enumerate}
+    \item The first order conditions for this problem with respect to $x$ and $y$ are given by setting the derivatives of the function equal to zero:
+    \[\frac{\partial f}{\partial x} = 2ax - 1 = 0 \]
+    \[\frac{\partial f}{\partial y} = 2by - 1 = 0 \]
+    \item Solving these equations gives us the values of $x$ and $y$ that maximize $f(x; y; a; b)$:
+    \[x^* = \frac{1}{2a}\ ,\  y^* = \frac{1}{2b}\]
+    \item The second order conditions are given by the second derivatives of the function with respect to $x$ and $y$:
+    \[\mathbf{H} = \begin{bmatrix} f_{xx} & f_{xy} \\ f_{yx} & f_{yy} \end{bmatrix} = \begin{bmatrix} \frac{\partial^2 f}{\partial x^2} & \frac{\partial^2 f}{\partial x \partial y} \\ \frac{\partial^2 f}{\partial y \partial x} & \frac{\partial^2 f}{\partial y^2} \end{bmatrix} = \begin{bmatrix} 2a & 0 \\ 0 & 2b \end{bmatrix}\]
+    And its determinant is:
+    \[\text{det}(\mathbf{H}) = 4ab\]
+    The point $(x^*, y^*)$ is a maximum if the determinant of the Hessian matrix is positive and the second order partial derivatives $\frac{\partial^2 f}{\partial x^2}$ and $\frac{\partial^2 f}{\partial y^2}$ are negative. Therefore, $a$ and $b$ need to be negative for $(x^*, y^*)$ to be a maximum.
+    \item To compute $\frac{dy^*}{da}$, we use the implicit function theorem, which gives us:
+    \[\frac{dy^*}{da} = -\frac{\frac{\partial^2 f}{\partial x \partial y}}{\frac{\partial^2 f}{\partial y^2}} = 0\]
+    So $\frac{dy^*}{da} = 0$. The result is the same as we compute it directly using the solution that we obtained in point 2 
+    \item If we plug in $x^*(a; b)$ and $y^*(a; b)$ into $f$, and then take the derivative with respect to $a$, we get:
+    \[\frac{\partial f}{\partial a} = \frac{\partial}{\partial a}(a(x^*)^2 - x^* + b(y^*)^2 - y^*) = (x^*)^2\]
+    By the envelope theorem, the derivative of the value function with respect to $a$ is $(x^*)^2$. 
+    
+    We get the same result! The second method is faster.
+    \item The function $f$ is concave in $x$ and $y$ when $a$ and $b$ are negative, as that would ensure the second partial derivatives $\frac{\partial^2 f}{\partial x^2}$ and $\frac{\partial^2 f}{\partial y^2}$ are negative, which is the condition for concavity. The function $f$ is convex in $x$ and $y$ when $a$ and $b$ are positive.
+\end{enumerate}
+\clearpage
+\section{Problem 3. Multivariate constrained maximization.}
+\begin{enumerate}
+    \item The Lagrangian function is a method to solve optimization problems with constraints. In this case, the Lagrangian is:
+    \[\mathcal{L}(x,y,\lambda) = x^{\alpha}y^{\beta} + \lambda(M - p_x x - p_y y)\]
+    where $\lambda$ is the Lagrange multiplier.
+    \item The first order conditions are given by the partial derivatives of the Lagrangian with respect to $x$, $y$ and $\lambda$:
+    \[\frac{\partial \mathcal{L}}{\partial x} = \alpha x^{\alpha - 1}y^{\beta} - \lambda p_x = 0\]
+    \[\frac{\partial \mathcal{L}}{\partial y} = \beta x^{\alpha}y^{\beta - 1} - \lambda p_y = 0\]
+    \[\frac{\partial \mathcal{L}}{\partial \lambda} = M - p_x x - p_y y = 0\]
+    \item Solving the above system of equations gives us:
+    \[x^* = \frac{\alpha M}{p_x(\alpha + \beta)}\]
+    \[y^* = \frac{\beta M}{p_y(\alpha + \beta)}\]
+    \item The solutions for $x^*$ and $y^*$ satisfy the constraints $x > 0$ and $y > 0$ as long as $p_x$, $p_y$ and $M$ are all positive. Also, we must have $\alpha M > 0$ and $\beta M > 0$ which is true given the condition $0 < \alpha, \beta < 1$ and $M > 0$.
+    \item The derivative of $x^*$ with respect to $p_x$ is negative:
+    \[\frac{dx^*}{dp_x} = -\frac{\alpha M}{p_x^2(\alpha + \beta)} < 0\]
+    This means that as the price of good x increases, the quantity consumed decreases, which is intuitive.
+    \item The derivative of $x^*$ with respect to $p_y$ is:
+    \[\frac{dx^*}{dp_y} = 0\]
+    This implies that the quantity of good x consumed is not affected by the price of good y, reflecting the assumption of no substitution between goods in the Cobb-Douglas utility function.
+    \item The derivative of $x^*$ with respect to $M$ is:
+    \[\frac{dx^*}{dM} = \frac{\alpha}{p_x(\alpha + \beta)} > 0\]
+    This implies that as the total income M increases, the quantity of good x consumed increases, which also makes intuitive sense.
+    \item To calculate $\frac{\partial u(x^*(p_x, p_y, M), y^*(p_x, p_y, M))}{\partial p_x}$, we use the envelope theorem, which gives us:
+    \[\frac{\partial u(x^*(p_x, p_y, M), y^*(p_x, p_y, M))}{\partial p_x} = -\lambda^* x^* = -\frac{M}{p_x + p_y}x^*\]
+    This means that as the price of good x increases, utility at the optimum decreases. This result is not surprising because an increase in price without an increase in income leads to lower consumption and hence lower utility.
+    \item Similarly, we use the envelope theorem to calculate $\frac{\partial u(x^*(p_x, p_y, M), y^*(p_x, p_y, M))}{\partial M}$:
+    \[\frac{\partial u(x^*(p_x, p_y, M), y^*(p_x, p_y, M))}{\partial M} = \lambda^* = \frac{1}{p_x + p_y} > 0\]
+    This means that as the total income M increases, utility at the optimum increases. This result is also not surprising because an increase in income allows for higher consumption of goods, leading to higher utility.
+\end{enumerate}
+
+
+\end{document}
