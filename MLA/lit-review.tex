@@ -1,0 +1,60 @@
+\documentclass[12pt]{article}
+
+\usepackage[letterpaper]{geometry}
+\usepackage{mathptmx} % 添加此行以更改全局字体为Times New Roman
+\geometry{top=1.0in, bottom=1.0in, left=1.0in, right=1.0in}
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\usepackage{setspace}
+\doublespacing
+
+\usepackage{rotating}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\lhead{}
+\chead{}
+\rhead{\thepage}
+\lfoot{}
+\cfoot{}
+\rfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\setlength\headsep{0.333in}
+
+\newcommand{\bibent}{\noindent \hangindent 40pt}
+\newenvironment{workscited}{\begin{center} Works Cited \end{center}}{\newpage }
+
+\begin{document}
+\begin{flushleft}
+
+Bowen Zhao\\
+John McClain\\
+College Writing 9V\\
+\today\\
+
+\begin{center}
+Review of "NeRF: Representing Scenes as Neural Radiance Fields for View Synthesis."
+\end{center}
+
+\setlength{\parindent}{0.5in}
+
+NeRF, or Neural Radiance Fields, is an exciting development in the field of 3D reconstruction from 2D images. In a breakthrough paper authored by Ben Mildenhall, Pratul P. Srinivasan, Matthew Tancik, Jonathan T. Barron, Ravi Ramamoorthi, and Ren Ng who were  from University of California Berkeley, Google Research, and University of California San Diego., a method for synthesizing novel views of complex 3D scenes from a limited set of 2D images is detailed.
+
+The problem that NeRF addresses is a pressing one in computer vision and graphics: How can we effectively and accurately convert 2D images into 3D representations? This issue holds significant importance, not just for scientists involved in these fields but also for the general public. The solutions to this problem have wide-ranging applications, from virtual and augmented reality experiences to improved navigation systems and architectural modeling.
+
+Historically, this problem has been tackled using methods like multi-view stereo or structure from motion techniques. However, these solutions often struggle to capture fine details or manage occlusion well, resulting in less accurate 3D reconstructions. Furthermore, they require extensive computational resources, making them less feasible for real-time applications.
+
+The proposed solution by the authors, NeRF, uses a fully connected deep network to model a scene's 3D radiance field. The algorithm takes as input spatial coordinates along the camera ray, along with the viewing direction, and outputs the volume density and view-dependent emitted radiance at those coordinates. By modeling and rendering the 3D radiance field, NeRF can synthesize novel views of the scene with fine details and accurate occlusion handling. The method remarkably requires a relatively small number of views to generate these high-quality 3D reconstructions.
+
+In conclusion, the authors' novel approach provides a significant leap forward in addressing the problem of 3D scene reconstruction from 2D images. In terms of content, the benefits are numerous, including more efficient rendering, improved detail capture, and the possibility of real-time applications. These benefits, however, come with the costs of requiring training for each scene separately, limiting its immediate scalability.
+
+In my opinion,  NeRF is a big step forward in creating 3D images from 2D ones. It can make detailed 3D models from few 2D images, which could be useful in areas like movies, building design, and medical pictures. But, NeRF has some disadvantages. It needs a unique training process for each scene and this training can take a lot of time and resources. Despite these issues, NeRF is still a promising technology. With more improvements, it could greatly change how we create 3D models.
+\begin{workscited}
+
+\bibent{Mildenhall, Ben, et al. "NeRF: Representing Scenes as Neural Radiance Fields for View Synthesis." arXiv preprint arXiv:2003.08934 (2020).}
+
+\end{workscited}
+
+\end{flushleft}
+\end{document}
