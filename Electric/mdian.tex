@@ -1,0 +1,106 @@
+\documentclass[UTF8,titlepage,a4paper]{ctexart}
+\usepackage{amsmath,amssymb,amsthm,amsfonts,amscd}
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\usepackage{graphicx}
+\usepackage{titlesec}
+\usepackage{makecell}
+\usepackage{longtable}
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\usepackage{soul}
+\usepackage{adjustbox}
+\usepackage{tcolorbox}
+\usepackage{enumerate}
+\usepackage{pdfpages}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{pgfplots}
+\usepackage{hyperref}
+\numberwithin{figure}{section}
+\usepackage[left=1.25in,right=1.25in,%
+top=1in,bottom=1in]{geometry}
+\usepackage{color}
+\titleformat{\section}
+  {\raggedright\LARGE\bfseries}{\thesection}{1em}{}
+\begin{document}
+\title{模电报告}
+\author{赵伯远}
+\date{\today}
+\thispagestyle{empty}
+\begin{center}
+{\fontsize{30pt}{21pt}\selectfont \textbf{东华大学课程设计报告}}
+
+\vspace{10cm}
+
+\begin{tabular}{l}
+    {\large 课程名称：电子技术设计与实践（模电）} \\
+    \\
+    \large{课题名称：\underline{\hspace{40pt}双极性全波精密整流电路\hspace{40pt}}}  \\
+    \\
+    \large{指导教师：\underline{\hspace{70pt}陈根龙\hspace{70pt}}} \\
+    \\
+    \large{学生姓名：\underline{\hspace{70pt}赵伯远\hspace{70pt}}} \\
+    \\
+    \large{学生班级学号：\underline{\hspace{11pt}人工智能2101 211440128\hspace{11pt}}} \\
+    \end{tabular}
+\end{center}
+\clearpage
+\setcounter{page}{1}
+\tableofcontents
+\clearpage
+\section{摘要}
+双极性全波精密整流电路是一种高效的整流电路设计，它能够将交流信号转换为直流信号，同时保留信号的双极性属性。这种电路设计利用运算放大器和二极管来实现精确的整流，确保在不同电源范围内的稳定性和效率。与传统的整流电路相比，双极性全波精密整流电路能够在较宽的电源范围内工作，使得各种输入信号可以进行全波整流\cite{ti}。此外，它通过减少二极管产生的压降，确保了输入与输出之间的高精度匹配，从而提高了整流效率。双极性全波精密整流电路的设计包括原理理解、组件选择、仿真测试和PCB设计，为实现高效和精确的整流提供了综合的解决方案\cite{ti}。通过现代仿真工具，如Multisim，可以进行电路性能的验证和优化，进一步确保了电路设计的准确性和可靠性\cite{csdn}。在多种应用中，双极性全波精密整流电路为实现高效、高精度的电力转换提供了重要的技术支持，展现出较高的实用价值和广泛的应用前景。
+
+\section{设计任务}
+\begin{enumerate}
+    \item 利用基本的集成运算放大器、二极管和电阻等电子元件，设计并实现一个双向全波精密整流电路，以实现微弱交流信号的双向全波整流功能。
+    \item 在Multisim软件平台上进行电路原理仿真，通过仿真结果对电路参数进行合理选取或调整，以确保电路的性能符合设计要求。
+    \item 在便携式实验箱上构建并调试设计完成的电路，确保电路的实际性能与设计目标一致。
+    \item 对比电路的实际输出、理论计算值和仿真结果，分析可能导致误差的因素，并提出可能的改进措施以优化电路性能。
+\end{enumerate}
+
+\section{设计指标}
+\begin{enumerate}
+    \item 电源电压范围：±12V
+    \item 输入信号幅值范围：200mV至1V
+    \item 输入信号波形：正弦波
+    \item 输出评估：
+       \begin{itemize}
+           \item 输出波形的测量
+           \item 输入输出信号幅值误差的测量与评估
+       \end{itemize}
+\end{enumerate}
+
+
+\section{方案框图与简要原理}
+
+\subsection{经典的精密整流电路}
+\begin{itemize}
+    \item \textbf{原理}：该设计利用运算放大器来补偿二极管的压降，实现精密整流。通常会有一个反相和非反相输入，以及一个二极管，它们连接到运算放大器的输出和输入，以确保在输入信号的正半周期和负半周期中实现整流。
+    \item \textbf{优点}：电阻匹配简单，只需确保 \( R_1 = R2 \)。可以通过更改某些电阻的值来调节电路的增益。
+\end{itemize}
+
+\subsection{使用特定集成运算放大器（如LM358）的设计}
+\begin{itemize}
+    \item \textbf{原理}：LM358是一种低功耗、双运放的运算放大器，可以用于设计精密全波整流电路，以实现微弱交流信号的双向全波整流。
+\end{itemize}
+
+\subsection{优缺点比较}
+\begin{itemize}
+    \item \textbf{经典设计}的优点是简单和直接，但可能不适用于所有应用，尤其是在输入信号幅度变化较大或需要更高精度时。
+    \item \textbf{使用特定集成运算放大器}的设计可能提供更好的性能和更高的精度，但可能需要更多的调试和优化。
+\end{itemize}
+
+\subsection{最终方案选择的理由}
+在选择最终方案时，可能需要考虑以下因素：
+\begin{itemize}
+    \item \textbf{电路的简单性}：简单的电路可能更容易理解和实现。
+    \item \textbf{所需的精度和性能}：如果需要更高的精度和性能，可能需要选择更复杂的设计或使用特定的集成运算放大器。
+    \item \textbf{可调整性}：如果电路需要能够调整以适应不同的输入信号和应用，可能需要选择具有更多可调参数的设计。
+\end{itemize}
+\bibliographystyle{plain}
+\bibliography{references}
+\end{document}

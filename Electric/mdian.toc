@@ -1,0 +1,8 @@
+\contentsline {section}{\numberline {1}摘要}{2}{section.1}%
+\contentsline {section}{\numberline {2}设计任务}{2}{section.2}%
+\contentsline {section}{\numberline {3}设计指标}{2}{section.3}%
+\contentsline {section}{\numberline {4}方案框图与简要原理}{2}{section.4}%
+\contentsline {subsection}{\numberline {4.1}经典的精密整流电路}{2}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}使用特定集成运算放大器（如LM358）的设计}{3}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}优缺点比较}{3}{subsection.4.3}%
+\contentsline {subsection}{\numberline {4.4}最终方案选择的理由}{3}{subsection.4.4}%
