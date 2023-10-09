@@ -325,13 +325,182 @@ top=1in,bottom=1in]{geometry}
          \label{}
         \end{figure}
     \item \textbf{输出信号}：经过上述处理，最终得到两个半波信号：一个478mV的正半波和一个-478mV的负半波。这两个信号加在一起，形成了一个完整的双极性信号。
-    \item \begin{figure}[H]
+    \begin{figure}[H]
         \centering
          \resizebox{0.75\textwidth}{!}{\includegraphics{./img/fz5.png}}
          \caption{最终输出}
          \label{}
         \end{figure}
 \end{itemize}
+
+\section{组装与调试}
+\subsection{仪器 \& 工具}
+\begin{enumerate}
+    \item 硬木课堂EPI-LITE302实验箱（含面包板）
+    \begin{figure}[H]
+    \centering
+     \resizebox{0.75\textwidth}{!}{\includegraphics{./img/ymkt.png}}
+     \caption{EPI-LITE302功能示意图}
+     \label{}
+    \end{figure}
+    \item 镊子，剪刀
+    \item 杜邦线若干，用于测试电路
+    \item 计算机，用于Multisim仿真和实验箱电路测试
+\end{enumerate}
+
+\subsection{测试数据 \& 波形}
+
+电路的输出信号波形如下：
+\begin{figure}[H]
+\centering
+ \resizebox{0.75\textwidth}{!}{\includegraphics{./img/cs2.png}}
+ \caption{输出信号波形}
+ \label{}
+\end{figure}
+
+最终电路的输入输出信号幅值误差如下：
+\begin{figure}[H]
+\centering
+ \resizebox{0.75\textwidth}{!}{\includegraphics{./img/cs1.png}}
+ \caption{输入输出信号幅值误差}
+ \label{}
+\end{figure}
+
+综上可以看到，电路的输出信号波形基本对称，且输出信号幅值误差较小，满足了设计要求。
+
+\subsection{调试技巧}
+\begin{itemize}
+    \item \textbf{组织工作区}：保持工作区整洁，确保所有需要的组件和工具都在手边。
+    
+    \item \textbf{清晰的布线}：
+    \begin{itemize}
+        \item 使用不同颜色的导线表示不同的电源线、地线和信号线。
+        \item 避免在面包板上出现交叉的导线，以减少混淆和错误的可能性。
+    \end{itemize}
+    
+    \item \textbf{逐步搭建}：按照电路模块或部分逐步搭建，每添加一个模块后进行测试，确保每一步的正确性。
+    
+    \item \textbf{使用测试工具}：利用示波器、数字万用表等工具检查关键节点的电压和信号。
+    
+    \item \textbf{双重检查连接}：在给电路上电之前，仔细检查所有的连接，确保没有短路或错误连接，保证所有器件稳定插在面包板上。
+    
+    \item \textbf{注意电源极性}：确保电源的正负极性连接正确，特别是当使用电解电容或半导体组件时。
+    
+    \item \textbf{适量的电源电压}：初次上电时，尝试使用较低的电源电压，这样即使出现错误，也不容易导致组件损坏。
+    
+    \item \textbf{记录和标记}：在面包板上使用标签或便利贴标记关键的节点或组件，同时，记录每一次修改和观察到的结果。
+    
+    \item \textbf{使用探针}：连接示波器时使用探针代替普通导线，使得调试时可以更快速地更换探查点观察到信号波形。
+
+    \item \textbf{耐心和细心}：调试电路时可能会遇到各种意想不到的问题，需要有耐心。每次修改后，仔细检查，确保每一步都是正确的。
+    
+    
+\end{itemize}
+
+\subsection{调试中出现的故障 \& 解决方案}
+
+\begin{itemize}
+    \item \textbf{问题1：} 电路输出信号波形不对称，且幅值较小。
+    \begin{figure}[H]
+    \centering
+     \resizebox{0.75\textwidth}{!}{\includegraphics{./img/cw1.png}}
+     \caption{错误波形}
+     \label{}
+    \end{figure}
+     \textbf{解决方案：} 检查电路连接，发现反向加法器的输入端连接错误，导致输出信号幅值不对称。修改后，电路正常工作。
+    
+    \item \textbf{问题2：} 波形在零点处的误差过大。
+    \begin{figure}[H]
+    \centering
+     \resizebox{0.75\textwidth}{!}{\includegraphics{./img/cw2.png}}
+     \caption{错误波形}
+     \label{}
+    \end{figure}
+    \textbf{解决方案：} 由于运放的响应速度有限，当信号频率过高时运放无法跟上，导致在零点交叉时出现短暂的延迟或失真。减小信号频率后，电路正常工作。
+\end{itemize}
+
+\section{电路特点 \& 优化方案}
+
+\subsection{电路特点}
+\begin{itemize}
+    \item \textbf{双极性输出}：与常规整流器不同，该设计可以处理输入信号的正和负半周期，从而产生双极性的输出。
+    \item \textbf{精确整流}：由于使用了运算放大器，它可以避免传统二极管整流器中约0.7V的二极管压降，实现精确整流。
+    \item \textbf{高输入阻抗}：使用运算放大器可以确保高的输入阻抗，这意味着电路对前级电路的负载效应较小。
+    \item \textbf{低输出阻抗}：运算放大器的输出阻抗通常很低，这使得该电路能够驱动各种负载。
+    \item \textbf{易于调试}：电路结构对称，同时引入探针代替普通导线，易于观察不同节点的信号波形，方便调试。
+\end{itemize}
+\subsection{优化方案}
+\begin{itemize}
+    \item \textbf{选择响应速度更快的运放}：目前的电路仍存在一定的零点误差，考虑选择具有低输入偏置电流、低输入偏移电压、高速响应和宽带宽的运算放大器，以提高整流精度和响应速度。
+    \item \textbf{电源去耦}：在运算放大器的电源引脚附近加入去耦电容，以减少电源噪声对电路的影响。
+    \item \textbf{使用肖特基二极管}：为了减少二极管的压降，可以考虑使用肖特基二极管代替常规硅二极管。
+    \item \textbf{增加保护电路}：为了防止过大的输入信号损坏运放，可以在输入端增加限流电阻和钳位二极管。
+    \item \textbf{考虑温度效应}：电路可能会受到温度变化的影响。选择温度系数小的元件或使用温度补偿技术。
+\end{itemize}
+\clearpage
+\section{元器件清单}
+
+\begin{table}[h]
+    \centering
+    \begin{tabularx}{\textwidth}{|c|X|X|X|c|X|}
+    \hline
+    \textbf{序号} & \textbf{名称} & \textbf{型号\&规格}  & \textbf{符号} & \textbf{数量} & \textbf{说明} \\
+    \hline
+    1 & 运算放大器 & LF353 & & 2 & LF353中包含两个运算放大器 \\
+    \hline
+    2 & 电阻 & 1k$\Omega$ &$R_1,R_2,R_4~R_11$ & 10 &  \\
+    \hline
+    3 & 电阻 & 2k$\Omega$ &$R_3$& 1 & 半波精密整流电路中的$R_f$ \\
+    \hline
+    4 & 二极管 & 1N4148 &$D_1,D_2$& 4 & 压降约为0.7v \\
+    \hline
+    5 & 导线 &  & & 若干 &  \\
+    \hline
+    6 & 探针 &  & & 2 & 方便调试 \\
+    \hline
+    % 在此添加其他元器件信息
+    \end{tabularx}
+    \caption{元器件清单}
+    \end{table}
+
+\section{电路总图}
+组装完成的最终电路图如下所示：
+\begin{figure}[H]
+\centering
+ \resizebox{0.75\textwidth}{!}{\includegraphics{./img/zz.jpg}}
+ \caption{电路总图}
+ \label{}
+\end{figure}
+
+\clearpage
+
+\section{收获与感想}
+在制作双极性全波精密整流电路的过程中，我深刻地体验到了电子设计的魅力和挑战。开始时，我对整个电路的理解仅停留在理论层面，但当我真正开始搭建和调试时，才发现理论与实践之间存在许多微妙的差异。
+
+首先，选择合适的元器件是关键。我发现即使是相同规格的元器件，不同品牌和型号之间的性能也有所不同。这使我认识到了在设计电路时考虑元器件特性的重要性。
+
+在调试过程中，我遇到了不少困难，特别是在零点附近的误差。这促使我深入研究原因，并学会了如何利用工具和技术来优化电路性能。
+
+最终，当我看到电路成功地输出了预期的整流波形时，我为自己的努力和成果感到非常自豪。这次经历不仅提高了我的实践能力，也加深了我对电路设计的理解。我深刻地认识到，电子工程不仅是关于理论知识，更多的是关于实践、创新和解决实际问题的能力。
+
+\clearpage
+\nocite{*}
 \bibliographystyle{plain}
 \bibliography{references}
+
+\section*{附录}
+\begin{figure}[H]
+\centering
+ \resizebox{0.75\textwidth}{!}{\includegraphics{./img/fl1.png}}
+ \caption{附录1：multisim仿真电路}
+ \label{}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+ \resizebox{0.75\textwidth}{!}{\includegraphics{./img/fl2.png}}
+ \caption{附录2：硬木课堂实验箱操作显示界面}
+ \label{}
+\end{figure}
+
 \end{document}
