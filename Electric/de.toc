@@ -1,0 +1,21 @@
+\contentsline {section}{\numberline {1}设计指标}{2}{section.1}%
+\contentsline {subsection}{\numberline {1.1}设计指标}{2}{subsection.1.1}%
+\contentsline {section}{\numberline {2}系统概述}{2}{section.2}%
+\contentsline {subsection}{\numberline {2.1}设计思想}{2}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}可行性论证}{2}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}各功能的组成}{2}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}总体工作过程}{2}{subsection.2.4}%
+\contentsline {section}{\numberline {3}单元电路设计与分析}{4}{section.3}%
+\contentsline {subsection}{\numberline {3.1}10 倍率分频器}{4}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}译码显示电路}{5}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}单稳态触发电路}{7}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}调试信号发生器}{8}{subsection.3.4}%
+\contentsline {subsection}{\numberline {3.5}数字频率计}{10}{subsection.3.5}%
+\contentsline {subsection}{\numberline {3.6}电路总图}{12}{subsection.3.6}%
+\contentsline {section}{\numberline {4}电路的组构与调试}{13}{section.4}%
+\contentsline {subsection}{\numberline {4.1}测试故障分析与排除}{13}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}功能的测试方法、步骤、设备}{13}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}功能测试结果}{14}{subsection.4.3}%
+\contentsline {section}{\numberline {5}结束语}{15}{section.5}%
+\contentsline {subsection}{\numberline {5.1}对设计题目的结论性意见及进一步改进的意向说明}{15}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}总结收获}{15}{subsection.5.2}%
