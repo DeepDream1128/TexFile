@@ -1,0 +1,506 @@
+\documentclass[UTF8,titlepage,a4paper]{ctexart}
+\usepackage{amsmath,amssymb,amsthm,amsfonts,amscd}
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\usepackage{graphicx}
+\usepackage{titlesec}
+\usepackage{makecell}
+\usepackage{longtable}
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\usepackage{soul}
+\usepackage{adjustbox}
+\usepackage{tcolorbox}
+\usepackage{enumerate}
+\usepackage{pdfpages}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{pgfplots}
+\usepackage{hyperref}
+\numberwithin{figure}{section}
+\usepackage[left=1.25in,right=1.25in,%
+top=1in,bottom=1in]{geometry}
+\usepackage{color}
+\titleformat{\section}
+  {\raggedright\LARGE\bfseries}{\thesection}{1em}{}
+\begin{document}
+\title{模电报告}
+\author{赵伯远}
+\date{\today}
+\thispagestyle{empty}
+\begin{center}
+{\fontsize{30pt}{21pt}\selectfont \textbf{东华大学课程设计报告}}
+
+\vspace{10cm}
+
+\begin{tabular}{l}
+    {\large 课程名称：电子技术设计与实践（模电）} \\
+    \\
+    \large{课题名称：\underline{\hspace{22pt}双极性全波精密整流电路\hspace{22pt}}}  \\
+    \\
+    \large{指导教师：\underline{\hspace{70pt}陈根龙\hspace{70pt}}} \\
+    \\
+    \large{学生姓名：\underline{\hspace{70pt}赵伯远\hspace{70pt}}} \\
+    \\
+    \large{学生班级学号：\underline{\hspace{11pt}人工智能2101 211440128\hspace{11pt}}} \\
+    \end{tabular}
+\end{center}
+\clearpage
+\setcounter{page}{1}
+\tableofcontents
+\clearpage
+\section{摘要}
+双极性全波精密整流电路是一种高效的整流电路设计，它能够将交流信号转换为直流信号，同时保留信号的双极性属性。这种电路设计利用运算放大器和二极管来实现精确的整流，确保在不同电源范围内的稳定性和效率。与传统的整流电路相比，双极性全波精密整流电路能够在较宽的电源范围内工作，使得各种输入信号可以进行全波整流\cite{ti}。此外，它通过减少二极管产生的压降，确保了输入与输出之间的高精度匹配，从而提高了整流效率。双极性全波精密整流电路的设计包括原理理解、组件选择、仿真测试和PCB设计，为实现高效和精确的整流提供了综合的解决方案\cite{ti}。通过现代仿真工具，如Multisim，可以进行电路性能的验证和优化，进一步确保了电路设计的准确性和可靠性\cite{csdn}。在多种应用中，双极性全波精密整流电路为实现高效、高精度的电力转换提供了重要的技术支持，展现出较高的实用价值和广泛的应用前景。
+
+\section{设计任务 \& 设计指标}
+\subsection{设计任务}
+\begin{enumerate}
+    \item 利用基本的集成运算放大器、二极管和电阻等电子元件，设计并实现一个双极性全波精密整流电路，以实现微弱交流信号的双向全波整流功能。
+取或调整，以确保电路的性能符合设计要求。
+    \item 在便携式实验箱上构建并调试设计完成的电路，确保电路的实际性能与设计目标一致。    \item 在Multisim软件平台上进行电路原理仿真，通过仿真结果对电路参数进行合理选
+    \item 对比电路的实际输出、理论计算值和仿真结果，分析可能导致误差的因素，并提出可能的改进措施以优化电路性能。
+\end{enumerate}
+
+\subsection{设计指标}
+\begin{enumerate}
+    \item 电源电压范围：±12V
+    \item 输入信号幅值范围：200mV至1V
+    \item 输入信号波形：正弦波
+    \item 输出评估：
+       \begin{itemize}
+           \item 输出波形的测量
+           \item 输入输出信号幅值误差的测量与评估
+       \end{itemize}
+\end{enumerate}
+
+\clearpage
+\section{方案与简要原理}
+
+\subsection{方案1：双电源精密全波整流电路}
+
+\textbf{原理：} 利用双电源和运算放大器实现精密整流，同时保持运算放大器在闭环操作中，避免饱和，并可实现一些增益。
+
+\textbf{优点:}
+\begin{itemize}
+    \item 高精度: 双电源设计允许更高的整流精度。
+    \item 增益可调: 可以通过选择适当的运算放大器和反馈网络来实现所需的增益。
+\end{itemize}
+
+\textbf{缺点：} 电路可能会更复杂，并且需要双电源供电。
+
+\begin{figure}[H]
+\centering
+ \resizebox{0.75\textwidth}{!}{\includegraphics{./img/yYGcS.png}}
+ \caption{双电源精密全波整流电路}
+ \label{}
+\end{figure}
+
+\subsection{方案2：全相位运输阻抗模式精密全波整流电路}
+
+\textbf{原理：} 该设计包括一个完全差分输入和输出的运算放大器，四个二极管，和一个电阻，以实现精密全波整流。
+
+\textbf{优点:}
+\begin{itemize}
+    \item 精度: 由于运输阻抗模式的设计，可以实现高精度的整流。
+    \item 简单的电路结构: 只需要一个运算放大器，四个二极管和一个电阻。
+\end{itemize}
+
+\textbf{缺点：} 可能需要特定类型的运算放大器或其他组件，以实现所需的性能。
+
+\begin{figure}[H]
+\centering
+ \resizebox{0.75\textwidth}{!}{\includegraphics{./img/42.png}}
+ \caption{全相位运输阻抗模式精密全波整流电路}
+ \label{}
+\end{figure}
+
+\subsection{方案3：电压模式精密全波整流电路}
+
+\textbf{原理：} 通过使用包括五个NMOS晶体管的模拟构建块差分电压电流传输放大器（DVCCTA），该方案适用于低电压和高频输入信号。
+
+\textbf{优点:}
+\begin{itemize}
+    \item 低电压操作: 设计允许在低电压条件下工作。
+    \item 高频性能: 适用于高频输入信号的整流。
+\end{itemize}
+
+\textbf{缺点：} 电路可能会相对复杂，并且可能需要特定的组件。
+\begin{figure}[H]
+\centering
+ \resizebox{0.75\textwidth}{!}{\includegraphics{./img/121450.png}}
+ \caption{}
+ \label{}
+\end{figure}
+
+\subsection{方案4：双绝对值电路设计方案}
+
+\textbf{原理：} 这种设计也称为精密全波整流器(PFWR)，它能在两个半周期内产生输出，并且只能在一个方向上产生。它也被称为绝对值电路，因为输出信号的振幅只在正方向上，从而得到输入信号的绝对值\cite{electronics_tutorial}。
+
+\textbf{优点:}
+\begin{itemize}
+    \item 输出干净: 由于输出信号的振幅只在正方向上，因此能得到干净的输出信号。
+    \item 设计简单: 相对于其他方案，这种设计可能更简单，更容易实现。
+\end{itemize}
+
+\textbf{选择理由：} 使用双绝对值电路组成双极性精密全波整流电路是所有方案中最为合适的方案，主要基于以下几点考虑：
+\begin{itemize}
+    \item \textbf{双极性整流能力：} 该方案能够实现双极性整流，处理正负两个电压半周期，使得输出信号能够保持在正向，满足了我们的设计要求。
+    \item \textbf{设计和实现的简洁性：} 通过采用双绝对值电路，整个系统的设计和实现变得相对简单和直接，降低了设计难度和实现复杂性。
+    \item \textbf{整流精度和信号质量：} 该方案能够保证较高的整流精度和良好的信号质量，满足了精密整流的要求。
+    \item \textbf{可扩展性和可调整性：} 具有较好的可扩展性和可调整性，可以通过简单的调整和优化来满足不同的应用需求和性能要求。
+    \item \textbf{成本效益：} 与其他方案相比，该方案的成本效益较高，不仅能够满足设计要求，而且在成本和复杂度上都具有一定的优势。
+\end{itemize}
+
+最终方案框图如下：
+
+\begin{figure}[H]
+\centering
+ \resizebox{1\textwidth}{!}{\includegraphics{./img/abs.png}}
+ \caption{双绝对值电路方案框图}
+ \label{}
+\end{figure}
+
+\section{单元电路设计}
+\subsection{半波精密整流电路}
+
+半波精密整流电路通常使用运算放大器和两个二极管来实现。它可以提供比传统的半波整流器更好的性能。
+\subsubsection{公式推导}
+
+\textbf{当 $u_i > 0$ 时：}
+
+\begin{enumerate}
+    \item 输出 \( u_{O1'} \) 为负，因此 \( D_1 \) 截止，而 \( D_2 \) 导通。
+    \item 负反馈电流路径为：从 \( u_{O1'} \) 经过 \( D_2 \) 到 \( u_{O1} \)，再经过 \( 2R \) 到 \( u_- \)。
+    \item 由于运算放大器处于线性工作区，输出 \( u_{O1} \) 为 \( -2u_i \)。
+\end{enumerate}
+
+\textbf{当 $u_i < 0$ 时：}
+
+\begin{enumerate}
+    \item 输出 \( u_{O1'} \) 为正，因此 \( D_1 \) 导通，而 \( D_2 \) 截止。
+    \item 负反馈电流路径为：从 \( u_{O1'} \) 经过 \( D_1 \) 到 \( u_- \)。
+    \item 由于 \( D_1 \) 导通，而 \( D_2 \) 截止，\( u_{O1'} \) 约为 \( 0.7V \)（二极管的导通电压）。
+    \item 电阻 \( 2R \) 无电流流过，因此 \( u_{O1} \) 为 0。
+\end{enumerate}
+
+从以上分析可以看出，只有在 \( u_i > 0 \) 时，输出 \( u_{O1} \) 为非零值，这样就实现了半波整流。当 \( u_i < 0 \) 时，输出 \( u_{O1} \) 为 0，确保了整流的效果。
+
+\subsubsection{元器件选择：}
+
+\begin{itemize}
+    \item 运算放大器：LF353D，它具有较低的输入偏置电流和较高的带宽，非常适合此应用。
+    \item 二极管：例如 1N4148，这是一个常用的快速开关二极管，适合整流应用。
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+ \resizebox{0.5\textwidth}{!}{\includegraphics{./img/23457.png}}
+ \caption{半波精密整流电路}
+ \label{}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+ \resizebox{0.75\textwidth}{!}{\includegraphics{./img/fz1.png}}
+ \caption{半波精密整流电路仿真结果}
+ \label{}
+\end{figure}
+\subsection{电压跟随器}
+
+\subsubsection{设计}
+电压跟随器是一种特殊的运算放大器应用，其中运算放大器的输出直接反馈到其反相输入，而信号源直接连接到其非反相输入, 输入电阻高, 输出电阻低，起前后级缓冲作用。
+
+\subsubsection{公式推导}
+由于电压跟随器的特性，我们有:
+\[ V_{out} = V_{in} \]
+
+\subsubsection{元器件选择}
+\begin{itemize}
+    \item 运算放大器：LF353D
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+ \resizebox{0.5\textwidth}{!}{\includegraphics{./img/124400.png}}
+ \caption{电压跟随器}
+ \label{}
+\end{figure}
+
+\subsection{反相加法器}
+
+\subsubsection{设计}
+反相加法器的设计涉及多个电阻，并能对多个输入进行加权求和，然后反相输出。
+
+\subsubsection{公式推导}
+\[ V_{out} = - \left( \frac{R_f}{R_1} V_{in1} + \frac{R_f}{R_2} V_{in2} + \ldots \right) \]
+
+\subsubsection{元器件选择}
+\begin{itemize}
+    \item 运算放大器：LF353D
+    \item 电阻：根据具体的增益要求选择
+\end{itemize}
+\begin{figure}[H]
+\centering
+ \resizebox{0.5\textwidth}{!}{\includegraphics{./img/124744.png}}
+ \caption{反相加法器}
+ \label{}
+\end{figure}
+\subsection{同相加法器}
+
+\subsubsection{设计}
+同相加法器可以对多个输入进行加权求和，然后输出。
+
+\subsubsection{公式推导}
+\[ V_{out} = \left( 1 + \frac{R_f}{R_1} \right) V_{in1} + \left( 1 + \frac{R_f}{R_2} \right) V_{in2} + \ldots \]
+
+\subsubsection{元器件选择}
+\begin{itemize}
+    \item 运算放大器：LF353D
+    \item 电阻：根据具体的增益要求选择
+\end{itemize}
+\begin{figure}[H]
+\centering
+ \resizebox{0.5\textwidth}{!}{\includegraphics{./img/124937.png}}
+ \caption{同相加法器}
+ \label{}
+\end{figure}
+
+\section{电路整体设计}
+整体电路设计如下图所示：
+\begin{figure}[H]
+\centering
+ \resizebox{0.75\textwidth}{!}{\includegraphics{./img/125338.png}}
+ \caption{电路整体设计}
+ \label{}
+\end{figure}
+
+电路工作原理如下：
+\begin{itemize}
+    \item \textbf{输入信号}：在本场景中，输入为一个幅值为500mVpk、频率为1kHz的正弦波信号。这代表了我们需要处理的原始信号。
+    
+    \item \textbf{半波精密整流}：
+    \begin{itemize}
+        \item 整流电路的核心是一个二极管（D1）和一个运放。
+        \item 当输入信号为正时，D1导通，信号得以通过；当输入为负时，D1截止，信号被阻断。
+        \item 由于运放和电阻的影响，输出信号幅值为-979mV。
+    \end{itemize}
+    \begin{figure}[H]
+        \centering
+         \resizebox{0.75\textwidth}{!}{\includegraphics{./img/fz1.png}}
+         \caption{半波精密整流电路仿真结果}
+         \label{}
+        \end{figure}
+    \item \textbf{电压跟随器}：电压跟随器是一个特殊的运放应用，确保输出信号完美跟随输入，输出信号的幅值保持为-979mV。
+    \begin{figure}[H]
+        \centering
+         \resizebox{0.75\textwidth}{!}{\includegraphics{./img/fz2.png}}
+         \caption{电压跟随器仿真结果}
+         \label{}
+        \end{figure}
+    \item \textbf{反向加法器}：
+    \begin{itemize}
+        \item 这个电路接收-979mV的信号，并将其反相。
+        \item 同时，它还接收了一个500mV的正偏置信号。
+        \item 最终得到478mV的正半波信号。
+    \end{itemize}
+    \begin{figure}[H]
+        \centering
+         \resizebox{0.75\textwidth}{!}{\includegraphics{./img/fz3.png}}
+         \caption{反向加法器仿真结果}
+         \label{}
+        \end{figure}
+
+    \item \textbf{同向加法器}：
+    \begin{itemize}
+        \item 与反向加法器不同，同向加法器不会反相信号。
+        \item 它直接将-979mV的信号与500mV的信号相加。
+        \item 最终得到-478mV的负半波信号。
+    \end{itemize}
+    \begin{figure}[H]
+        \centering
+         \resizebox{0.75\textwidth}{!}{\includegraphics{./img/fz4.png}}
+         \caption{同向加法器仿真结果}
+         \label{}
+        \end{figure}
+    \item \textbf{输出信号}：经过上述处理，最终得到两个半波信号：一个478mV的正半波和一个-478mV的负半波。这两个信号加在一起，形成了一个完整的双极性信号。
+    \begin{figure}[H]
+        \centering
+         \resizebox{0.75\textwidth}{!}{\includegraphics{./img/fz5.png}}
+         \caption{最终输出}
+         \label{}
+        \end{figure}
+\end{itemize}
+
+\section{组装与调试}
+\subsection{仪器 \& 工具}
+\begin{enumerate}
+    \item 硬木课堂EPI-LITE302实验箱（含面包板）
+    \begin{figure}[H]
+    \centering
+     \resizebox{0.75\textwidth}{!}{\includegraphics{./img/ymkt.png}}
+     \caption{EPI-LITE302功能示意图}
+     \label{}
+    \end{figure}
+    \item 镊子，剪刀
+    \item 杜邦线若干，用于测试电路
+    \item 计算机，用于Multisim仿真和实验箱电路测试
+\end{enumerate}
+
+\subsection{测试数据 \& 波形}
+
+电路的输出信号波形如下：
+\begin{figure}[H]
+\centering
+ \resizebox{0.75\textwidth}{!}{\includegraphics{./img/cs2.png}}
+ \caption{输出信号波形}
+ \label{}
+\end{figure}
+
+最终电路的输入输出信号幅值误差如下：
+\begin{figure}[H]
+\centering
+ \resizebox{0.75\textwidth}{!}{\includegraphics{./img/cs1.png}}
+ \caption{输入输出信号幅值误差}
+ \label{}
+\end{figure}
+
+综上可以看到，电路的输出信号波形基本对称，且输出信号幅值误差较小，满足了设计要求。
+
+\subsection{调试技巧}
+\begin{itemize}
+    \item \textbf{组织工作区}：保持工作区整洁，确保所有需要的组件和工具都在手边。
+    
+    \item \textbf{清晰的布线}：
+    \begin{itemize}
+        \item 使用不同颜色的导线表示不同的电源线、地线和信号线。
+        \item 避免在面包板上出现交叉的导线，以减少混淆和错误的可能性。
+    \end{itemize}
+    
+    \item \textbf{逐步搭建}：按照电路模块或部分逐步搭建，每添加一个模块后进行测试，确保每一步的正确性。
+    
+    \item \textbf{使用测试工具}：利用示波器、数字万用表等工具检查关键节点的电压和信号。
+    
+    \item \textbf{双重检查连接}：在给电路上电之前，仔细检查所有的连接，确保没有短路或错误连接，保证所有器件稳定插在面包板上。
+    
+    \item \textbf{注意电源极性}：确保电源的正负极性连接正确，特别是当使用电解电容或半导体组件时。
+    
+    \item \textbf{适量的电源电压}：初次上电时，尝试使用较低的电源电压，这样即使出现错误，也不容易导致组件损坏。
+    
+    \item \textbf{记录和标记}：在面包板上使用标签或便利贴标记关键的节点或组件，同时，记录每一次修改和观察到的结果。
+    
+    \item \textbf{使用探针}：连接示波器时使用探针代替普通导线，使得调试时可以更快速地更换探查点观察到信号波形。
+
+    \item \textbf{耐心和细心}：调试电路时可能会遇到各种意想不到的问题，需要有耐心。每次修改后，仔细检查，确保每一步都是正确的。
+    
+    
+\end{itemize}
+
+\subsection{调试中出现的故障 \& 解决方案}
+
+\begin{itemize}
+    \item \textbf{问题1：} 电路输出信号波形不对称，且幅值较小。
+    \begin{figure}[H]
+    \centering
+     \resizebox{0.75\textwidth}{!}{\includegraphics{./img/cw1.png}}
+     \caption{错误波形}
+     \label{}
+    \end{figure}
+     \textbf{解决方案：} 检查电路连接，发现反向加法器的输入端连接错误，导致输出信号幅值不对称。修改后，电路正常工作。
+    
+    \item \textbf{问题2：} 波形在零点处的误差过大。
+    \begin{figure}[H]
+    \centering
+     \resizebox{0.75\textwidth}{!}{\includegraphics{./img/cw2.png}}
+     \caption{错误波形}
+     \label{}
+    \end{figure}
+    \textbf{解决方案：} 由于运放的响应速度有限，当信号频率过高时运放无法跟上，导致在零点交叉时出现短暂的延迟或失真。减小信号频率后，电路正常工作。
+\end{itemize}
+
+\section{电路特点 \& 优化方案}
+
+\subsection{电路特点}
+\begin{itemize}
+    \item \textbf{双极性输出}：与常规整流器不同，该设计可以处理输入信号的正和负半周期，从而产生双极性的输出。
+    \item \textbf{精确整流}：由于使用了运算放大器，它可以避免传统二极管整流器中约0.7V的二极管压降，实现精确整流。
+    \item \textbf{高输入阻抗}：使用运算放大器可以确保高的输入阻抗，这意味着电路对前级电路的负载效应较小。
+    \item \textbf{低输出阻抗}：运算放大器的输出阻抗通常很低，这使得该电路能够驱动各种负载。
+    \item \textbf{易于调试}：电路结构对称，同时引入探针代替普通导线，易于观察不同节点的信号波形，方便调试。
+\end{itemize}
+\subsection{优化方案}
+\begin{itemize}
+    \item \textbf{选择响应速度更快的运放}：目前的电路仍存在一定的零点误差，考虑选择具有低输入偏置电流、低输入偏移电压、高速响应和宽带宽的运算放大器，以提高整流精度和响应速度。
+    \item \textbf{电源去耦}：在运算放大器的电源引脚附近加入去耦电容，以减少电源噪声对电路的影响。
+    \item \textbf{使用肖特基二极管}：为了减少二极管的压降，可以考虑使用肖特基二极管代替常规硅二极管。
+    \item \textbf{增加保护电路}：为了防止过大的输入信号损坏运放，可以在输入端增加限流电阻和钳位二极管。
+    \item \textbf{考虑温度效应}：电路可能会受到温度变化的影响。选择温度系数小的元件或使用温度补偿技术。
+\end{itemize}
+\clearpage
+\section{元器件清单}
+
+\begin{table}[h]
+    \centering
+    \begin{tabularx}{\textwidth}{|c|X|X|X|c|X|}
+    \hline
+    \textbf{序号} & \textbf{名称} & \textbf{型号\&规格}  & \textbf{符号} & \textbf{数量} & \textbf{说明} \\
+    \hline
+    1 & 运算放大器 & LF353 & & 2 & LF353中包含两个运算放大器 \\
+    \hline
+    2 & 电阻 & 1k$\Omega$ &$R_1,R_2,R_4~R_11$ & 10 &  \\
+    \hline
+    3 & 电阻 & 2k$\Omega$ &$R_3$& 1 & 半波精密整流电路中的$R_f$ \\
+    \hline
+    4 & 二极管 & 1N4148 &$D_1,D_2$& 4 & 压降约为0.7v \\
+    \hline
+    5 & 导线 &  & & 若干 &  \\
+    \hline
+    6 & 探针 &  & & 2 & 方便调试 \\
+    \hline
+    % 在此添加其他元器件信息
+    \end{tabularx}
+    \caption{元器件清单}
+    \end{table}
+
+\section{电路总图}
+组装完成的最终电路图如下所示：
+\begin{figure}[H]
+\centering
+ \resizebox{0.75\textwidth}{!}{\includegraphics{./img/zz.jpg}}
+ \caption{电路总图}
+ \label{}
+\end{figure}
+
+\clearpage
+
+\section{收获与感想}
+在制作双极性全波精密整流电路的过程中，我深刻地体验到了电子设计的魅力和挑战。开始时，我对整个电路的理解仅停留在理论层面，但当我真正开始搭建和调试时，才发现理论与实践之间存在许多微妙的差异。
+
+首先，选择合适的元器件是关键。我发现即使是相同规格的元器件，不同品牌和型号之间的性能也有所不同。这使我认识到了在设计电路时考虑元器件特性的重要性。
+
+在调试过程中，我遇到了不少困难，特别是在零点附近的误差。这促使我深入研究原因，并学会了如何利用工具和技术来优化电路性能。
+
+最终，当我看到电路成功地输出了预期的整流波形时，我为自己的努力和成果感到非常自豪。这次经历不仅提高了我的实践能力，也加深了我对电路设计的理解。我深刻地认识到，电子工程不仅是关于理论知识，更多的是关于实践、创新和解决实际问题的能力。
+
+\clearpage
+\nocite{*}
+\bibliographystyle{plain}
+\bibliography{references}
+
+\section*{附录}
+\begin{figure}[H]
+\centering
+ \resizebox{0.75\textwidth}{!}{\includegraphics{./img/fl1.png}}
+ \caption{附录1：multisim仿真电路}
+ \label{}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+ \resizebox{0.75\textwidth}{!}{\includegraphics{./img/fl2.png}}
+ \caption{附录2：硬木课堂实验箱操作显示界面}
+ \label{}
+\end{figure}
+
+\end{document}
