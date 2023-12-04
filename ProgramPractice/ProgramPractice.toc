@@ -27,9 +27,3 @@
 \contentsline {subsection}{\numberline {3.7}用户手册}{31}%
 \contentsline {subsection}{\numberline {3.8}测试结果}{32}%
 \contentsline {subsection}{\numberline {3.9}总结与分析}{33}%
-\contentsline {section}{\numberline {4}答辩问题}{34}%
-\contentsline {subsection}{\numberline {4.1}课题一的程序流程图}{34}%
-\contentsline {subsection}{\numberline {4.2}课题二的数据结构}{35}%
-\contentsline {subsection}{\numberline {4.3}课题三的时间复杂度}{35}%
-\contentsline {subsubsection}{\numberline {4.3.1}对于Q-learning}{35}%
-\contentsline {subsubsection}{\numberline {4.3.2}对于DFS}{36}%
