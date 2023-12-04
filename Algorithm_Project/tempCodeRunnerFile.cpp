@@ -1,0 +1,1 @@
+result_ga = knapsackGeneticAlgorithm(items, W, populationSize, generations, crossoverRate, mutationRate, tournamentSize);

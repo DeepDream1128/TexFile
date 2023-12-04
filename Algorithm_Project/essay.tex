@@ -1,0 +1,171 @@
+\documentclass[UTF8,titlepage]{ctexart}
+\usepackage{amsmath,amssymb,amsthm,amsfonts,amscd}
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\usepackage{graphicx}
+\usepackage{titlesec}
+\usepackage{makecell}
+\usepackage{longtable}
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\usepackage{soul}
+\usepackage{adjustbox}
+\usepackage{tcolorbox}
+\usepackage{enumerate}
+\usepackage{pdfpages}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{pgfplots}
+\usepackage[utf8]{inputenc}
+\usepackage{algorithm}
+% \usepackage{algorithmic}
+\usepackage{algpseudocode}
+\usepackage[utf8]{inputenc}
+\usepackage[linesnumbered,ruled,vlined]{algorithm2e}
+\SetKwBlock{Begin}{begin}{end} % 添加这一行来定义 Begin-End
+\numberwithin{figure}{section}
+\usepackage[left=1.25in,right=1.25in,%
+top=1in,bottom=1in]{geometry}
+\usepackage{color}
+\titleformat{\section}
+  {\raggedright\LARGE\bfseries}{\thesection}{1em}{}
+\begin{document}
+\title{算法导论课程报告 \\ \large{——01背包问题的求解与分析}}
+\author{赵伯远 \\ 211440128}
+\date{\today}
+\maketitle
+\tableofcontents
+\clearpage
+
+\section{问题描述}
+
+01背包问题是组合优化问题中的一个经典问题，其背景可以追溯到物品的装载和资源的分配。具体来说，假设有一个背包，其承载的最大重量为\( W \)。同时，有\( n \)个物品，每个物品有各自的重量\( w_i \)和价值\( v_i \)。01背包问题的目标是选择一些物品装入背包中，使得这些物品的总重量不超过背包的最大承载重量，而它们的总价值尽可能大。
+
+形式化地，我们可以将问题描述如下：
+
+\textbf{目标：}
+\begin{equation}
+    \max \sum_{i=1}^{n} v_i \cdot x_i
+\end{equation}
+
+\textbf{受到约束：}
+\begin{equation}
+    \sum_{i=1}^{n} w_i \cdot x_i \leq W
+\end{equation}
+
+\textbf{其中：}
+\begin{itemize}
+    \item \( x_i \) 是一个二元变量，如果物品\( i \)被选中，则\( x_i = 1 \)；如果没有被选中，则\( x_i = 0 \)。
+    \item \( v_i \) 是物品\( i \)的价值。
+    \item \( w_i \) 是物品\( i \)的重量。
+    \item \( W \) 是背包的最大承重。
+\end{itemize}
+
+\section{算法分析}
+
+\subsection{蛮力法}
+
+\subsubsection{朴素方法}
+以下是使用朴素方法求解01背包问题的伪代码：
+
+\begin{algorithm}[H]
+    \DontPrintSemicolon
+    \KwIn{$weights$ - list of item weights, $values$ - list of item values, $capacity$ - knapsack capacity}
+    \KwOut{Maximum value achievable}
+    \caption{BruteForceKnapsack}
+    \SetKwFunction{FBFK}{BruteForceKnapsack}
+    \SetKwProg{Fn}{Function}{:}{}
+    \Fn{\FBFK{$weights, values, capacity$}}{
+        $maxValue \gets 0$\;
+        \ForEach{$combination$}{
+            \If{$Weight(combination) \leq capacity$}{
+                $maxValue \gets \max(maxValue, Value(combination))$\;
+            }
+        }
+        \KwRet $maxValue$\;
+    }
+    \end{algorithm}
+
+\subsubsection{位运算优化方法}
+以下是使用位运算优化方法求解01背包问题的伪代码：
+
+\begin{algorithm}[H]
+    \DontPrintSemicolon
+    \KwIn{$weights$ - list of item weights, $values$ - list of item values, $capacity$ - knapsack capacity}
+    \KwOut{Maximum value achievable}
+    \caption{BitwiseOptimizedKnapsack}
+    \SetKwFunction{FBOK}{BitwiseOptimizedKnapsack}
+    \SetKwProg{Fn}{Function}{:}{}
+    \Fn{\FBOK{$weights, values, capacity$}}{
+        $maxValue \gets 0$\;
+        \For{$i \gets 0$ \KwTo $2^n - 1$}{
+            $weight \gets 0, value \gets 0$\;
+            \For{$j \gets 0$ \KwTo $n - 1$}{
+                \If{$i$ \& $(1 \ll j)$}{
+                    $weight \gets weight + weights[j]$\;
+                    $value \gets value + values[j]$\;
+                }
+            }
+            \If{$weight \leq capacity$}{
+                $maxValue \gets \max(maxValue, value)$\;
+            }
+        }
+        \KwRet $maxValue$\;
+    }
+    \end{algorithm}
+
+\subsection{动态规划}
+
+\subsubsection{二维数组方法}
+二维数组方法涉及创建一个表格，每个条目 dp[i][w] 表示在只考虑前 i 个物品且背包容量为 w 时所能达到的最大价值。
+
+\begin{algorithm}[H]
+\DontPrintSemicolon
+\KwIn{$weights$ - list of item weights, $values$ - list of item values, $capacity$ - knapsack capacity}
+\KwOut{Maximum value achievable}
+\caption{TwoDimensionalKnapsack}
+\SetKwFunction{FBDP}{TwoDimensionalKnapsack}
+\SetKwProg{Fn}{Function}{:}{}
+\Fn{\FBDP{$weights, values, capacity$}}{
+    $dp \gets$ array[0..length($weights$)][0..$capacity$] initialized to 0\;
+    \For{$i \gets 1$ \KwTo length($weights$)}{
+        \For{$w \gets 0$ \KwTo $capacity$}{
+            \uIf{$weights[i] \leq w$}{
+                $dp[i][w] \gets \max(dp[i-1][w], dp[i-1][w-weights[i]] + values[i])$\;
+            }
+            \Else{
+                $dp[i][w] \gets dp[i-1][w]$\;
+            }
+        }
+    }
+    \KwRet $dp[$length($weights$)$][$capacity$]$\;
+}
+\end{algorithm}
+
+\subsubsection{滚动数组方法}
+滚动数组方法通过仅维护表格的两行来优化空间使用，每次迭代时交替更新这两行。该方法在时间复杂度上与二维数组方法相同，但在空间复杂度上更优。
+
+
+\begin{algorithm}[H]
+    \DontPrintSemicolon
+    \KwIn{$weights$ - list of item weights, $values$ - list of item values, $capacity$ - knapsack capacity}
+    \KwOut{Maximum value achievable}
+    \caption{OneDimensionalKnapsack}
+    \SetKwFunction{FBOD}{OneDimensionalKnapsack}
+    \SetKwProg{Fn}{Function}{:}{}
+    \Fn{\FBOD{$weights, values, capacity$}}{
+        $dp \gets$ array[0..$capacity$] initialized to 0\;
+        \For{$i \gets 0$ \KwTo length($weights$) - 1}{
+            \For{$w \gets capacity$ \KwTo $weights[i]$ \textbf{step} -1}{
+                $dp[w] \gets \max(dp[w], dp[w - weights[i]] + values[i])$\;
+            }
+        }
+        \KwRet $dp[capacity]$\;
+    }
+    \end{algorithm}
+    
+    
+
+\end{document}

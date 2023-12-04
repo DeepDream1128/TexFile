@@ -34,5 +34,6 @@
     "**/.vscode/**"
   ],
   "C_Cpp_Runner.useAddressSanitizer": false,
-  "C_Cpp_Runner.showCompilationTime": false
+  "C_Cpp_Runner.showCompilationTime": false,
+  "cmake.sourceDirectory": "/workspaces/TexFile/prob3/attachments"
 }

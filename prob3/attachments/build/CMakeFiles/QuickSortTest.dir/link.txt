@@ -1,0 +1,1 @@
+/usr/bin/g++ -g CMakeFiles/QuickSortTest.dir/tests/test_sorting.cpp.o -o QuickSortTest 
