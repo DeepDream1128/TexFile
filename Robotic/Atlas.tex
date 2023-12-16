@@ -1,0 +1,61 @@
+\documentclass[UTF8,titlepage]{ctexart}
+\usepackage{amsmath,amssymb,amsthm,amsfonts,amscd}
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\usepackage{graphicx}
+\usepackage{titlesec}
+\usepackage{makecell}
+\usepackage{longtable}
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\usepackage{soul}
+\usepackage{adjustbox}
+\usepackage{tcolorbox}
+\usepackage{enumerate}
+\usepackage{pdfpages}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{pgfplots}
+\usepackage[utf8]{inputenc}
+\usepackage{booktabs}
+% \usepackage{algorithm}
+% \usepackage{algorithmic}
+% \usepackage{algpseudocode}
+\usepackage[linesnumbered,ruled,vlined]{algorithm2e}
+% \SetKwBlock{Begin}{begin}{end} % 添加这一行来定义 Begin-End
+\numberwithin{figure}{section}
+\usepackage[left=1.25in,right=1.25in,%
+top=1in,bottom=1in]{geometry}
+\usepackage{color}
+\titleformat{\section}
+  {\raggedright\LARGE\bfseries}{\thesection}{1em}{}
+\begin{document}
+
+\title{人形机器人Atlas概述}
+\author{赵伯远 211440128}
+\date{\today}
+\maketitle
+\section{引言}
+波士顿动力公司的Atlas机器人是一款高度先进的人形机器人，旨在模仿人类的行走、跑动和跳跃动作。该机器人集成了多种传感器和高级算法，使其能够在复杂的环境中自主导航和执行任务。
+
+\section{Atlas机器人的设计和功能}
+\subsection{机器人结构}
+Atlas机器人由高强度的航空级铝和钛合金构造，身高约1.8米，重达150公斤。它拥有四个液压驱动的四肢，以及具有28度自由度的手部，能够执行精细的操作任务。机器人的设计旨在使其能够在各种地形上行走和攀登，包括户外和建筑物内部。
+
+\subsection{传感器系统}
+Atlas的传感器系统是其核心功能之一，包括以下几种主要类型：
+\begin{itemize}
+    \item \textbf{TOF深度传感器}：结合头部RGB摄像头，以每秒15帧的速度生成环境的点云。点云数据通过多平面分割算法处理，形成3D环境模型，用于规划路径和计算落脚点。
+    \item \textbf{IMU（惯性测量单元）和联合位置与力传感器}：这些传感器帮助Atlas控制肢体动作，通过感知地面特征来保持平衡。
+    \item \textbf{激光测距仪和立体照相机}：用于实时避免障碍物、评估地形、导航和操纵移动对象。
+\end{itemize}
+
+\section{运动控制和导航}
+Atlas的运动控制和导航能力依赖于其先进的传感器系统和复杂的算法。机器人能够在不同的环境中自主行动，包括爬山、跑酷和穿越复杂地形。Atlas使用其传感器数据来识别和规划行动路径，如跳跃、爬升或避开障碍物。
+
+\section{应用领域和未来发展}
+Atlas机器人在多个领域具有广泛的应用潜力，包括搜救、灾难响应、军事操作和其他需要高度机动性的场合。随着技术的不断进步，我们可以期待Atlas在未来将具有更加智能的自适应能力和更高级的互动技术。
+
+\end{document}

@@ -1,0 +1,54 @@
+\contentsline {section}{\numberline {1}实验环境}{3}%
+\contentsline {section}{\numberline {2}项目1：子网划分}{3}%
+\contentsline {subsection}{\numberline {2.1}项目描述}{3}%
+\contentsline {subsection}{\numberline {2.2}项目实现思路}{3}%
+\contentsline {subsection}{\numberline {2.3}项目代码}{3}%
+\contentsline {subsection}{\numberline {2.4}实验结果}{4}%
+\contentsline {section}{\numberline {3}项目2：利用 TCP 时间戳选项实现 TCP 协议超时重传计算}{5}%
+\contentsline {subsection}{\numberline {3.1}项目描述}{5}%
+\contentsline {subsection}{\numberline {3.2}项目实现思路}{5}%
+\contentsline {subsection}{\numberline {3.3}项目代码}{5}%
+\contentsline {subsection}{\numberline {3.4}实验结果}{6}%
+\contentsline {section}{\numberline {4}项目3：Traceroute 程序实现}{7}%
+\contentsline {subsection}{\numberline {4.1}项目描述}{7}%
+\contentsline {subsection}{\numberline {4.2}项目实现思路}{7}%
+\contentsline {subsection}{\numberline {4.3}项目代码}{7}%
+\contentsline {subsection}{\numberline {4.4}实验结果}{9}%
+\contentsline {section}{\numberline {5}项目：Ping 程序实现}{10}%
+\contentsline {subsection}{\numberline {5.1}项目描述}{10}%
+\contentsline {subsection}{\numberline {5.2}项目实现思路}{10}%
+\contentsline {subsection}{\numberline {5.3}项目代码}{10}%
+\contentsline {subsection}{\numberline {5.4}实验结果}{11}%
+\contentsline {section}{\numberline {6}项目5：TCP 三报文握手建立连接、四报文挥手释放连接程序实现}{13}%
+\contentsline {subsection}{\numberline {6.1}项目描述}{13}%
+\contentsline {subsection}{\numberline {6.2}项目实现思路}{13}%
+\contentsline {subsection}{\numberline {6.3}项目代码}{13}%
+\contentsline {subsection}{\numberline {6.4}实验结果}{14}%
+\contentsline {section}{\numberline {7}项目6：IP 首部检验和计算程序实现}{15}%
+\contentsline {subsection}{\numberline {7.1}项目描述}{15}%
+\contentsline {subsection}{\numberline {7.2}项目实现思路}{15}%
+\contentsline {subsection}{\numberline {7.3}项目代码}{15}%
+\contentsline {subsection}{\numberline {7.4}实验结果}{16}%
+\contentsline {section}{\numberline {8}项目7：主机端口扫描程序设计}{17}%
+\contentsline {subsection}{\numberline {8.1}项目描述}{17}%
+\contentsline {subsection}{\numberline {8.2}项目实现思路}{17}%
+\contentsline {subsection}{\numberline {8.3}项目代码}{17}%
+\contentsline {subsection}{\numberline {8.4}实验结果}{18}%
+\contentsline {section}{\numberline {9}项目8：DNS 解析}{19}%
+\contentsline {subsection}{\numberline {9.1}项目描述}{19}%
+\contentsline {subsection}{\numberline {9.2}项目实现思路}{19}%
+\contentsline {subsection}{\numberline {9.3}项目代码}{19}%
+\contentsline {subsection}{\numberline {9.4}实验结果}{19}%
+\contentsline {section}{\numberline {10}项目9：网络爬虫}{21}%
+\contentsline {subsection}{\numberline {10.1}项目描述}{21}%
+\contentsline {subsection}{\numberline {10.2}项目实现思路}{21}%
+\contentsline {subsection}{\numberline {10.3}项目代码}{21}%
+\contentsline {subsection}{\numberline {10.4}实验结果}{22}%
+\contentsline {section}{\numberline {11}项目10：点对点文件传输系统}{23}%
+\contentsline {subsection}{\numberline {11.1}项目描述}{23}%
+\contentsline {subsection}{\numberline {11.2}项目实现思路}{23}%
+\contentsline {subsection}{\numberline {11.3}项目代码}{23}%
+\contentsline {subsubsection}{\numberline {11.3.1}receive.py}{23}%
+\contentsline {subsubsection}{\numberline {11.3.2}send.py}{24}%
+\contentsline {subsection}{\numberline {11.4}实验结果}{24}%
+\contentsline {section}{\numberline {12}总结}{26}%
