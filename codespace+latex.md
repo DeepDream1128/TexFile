@@ -49,3 +49,4 @@ sudo apt-get install texlive-full
 安装完后重启vscode，就可以使用vscode撰写latex了
 
 LaTeX工具链教程可见[此处（看后半段就行）](https://zhuanlan.zhihu.com/p/166523064)
+

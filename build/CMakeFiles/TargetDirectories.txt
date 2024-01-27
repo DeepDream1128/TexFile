@@ -1,0 +1,3 @@
+/workspaces/TexFile/build/CMakeFiles/QuickSortTest.dir
+/workspaces/TexFile/build/CMakeFiles/edit_cache.dir
+/workspaces/TexFile/build/CMakeFiles/rebuild_cache.dir

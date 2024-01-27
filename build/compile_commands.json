@@ -1,0 +1,8 @@
+[
+{
+  "directory": "/workspaces/TexFile/build",
+  "command": "/usr/bin/g++  -I/workspaces/TexFile/prob3/attachments -g -std=gnu++20 -o CMakeFiles/QuickSortTest.dir/tests/test_sorting.cpp.o -c /workspaces/TexFile/prob3/attachments/tests/test_sorting.cpp",
+  "file": "/workspaces/TexFile/prob3/attachments/tests/test_sorting.cpp",
+  "output": "CMakeFiles/QuickSortTest.dir/tests/test_sorting.cpp.o"
+}
+]
