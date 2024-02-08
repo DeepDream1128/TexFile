@@ -6,6 +6,8 @@
 #include <bitset> // For brute force approach
 #include <random> // For genetic algorithm
 #include <ctime> // For seeding random number generator
+#include <thread>
+#include <mutex>
 
 // 定义物品结构体，包含重量和价值
 struct Item {
@@ -63,15 +65,14 @@ std::pair<int, int> calculateTotal(const std::vector<Item>& items, const std::ve
 }
 
 // 锦标赛选择机制
-std::vector<int> tournamentSelection(const std::vector<std::vector<int>>& population, int tournamentSize, const std::function<int(const std::vector<int>&)>& fitnessFunc) {
-    std::mt19937 rng(std::random_device{}());
+std::vector<int> tournamentSelection(const std::vector<std::vector<int>>& population, int tournamentSize, std::function<int(const std::vector<int>&)> fitness) {    std::mt19937 rng(std::random_device{}());
     std::uniform_int_distribution<> dist(0, population.size() - 1);
     std::vector<int> best;
     int bestFitness = INT_MIN;
     
     for (int i = 0; i < tournamentSize; ++i) {
         int idx = dist(rng); // 随机选择一个个体
-        int currentFitness = fitnessFunc(population[idx]);
+        int currentFitness = fitness(population[idx]);
         if (currentFitness > bestFitness) {
             best = population[idx];
             bestFitness = currentFitness;
@@ -79,6 +80,12 @@ std::vector<int> tournamentSelection(const std::vector<std::vector<int>>& popula
     }
     
     return best;
+}
+
+void evaluateFitnessParallel(const std::vector<std::vector<int>>& population, std::vector<int>& fitnessResults, std::function<int(const std::vector<int>&)> fitness, int start, int end) {
+    for (int i = start; i < end; ++i) {
+        fitnessResults[i] = fitness(population[i]);
+    }
 }
 
 // 遗传算法求解背包问题
@@ -136,9 +143,93 @@ int knapsackGeneticAlgorithm(std::vector<Item>& items, int W, int populationSize
              return fitness(a) > fitness(b);
         });
         answer = std::max(answer, fitness(population.front()));
-        if (generation % 10 == 0) {
-            std::cout << "Generation " << generation << ": " << answer << std::endl;
+        // if (generation % 10 == 0) {
+        //     std::cout << "Generation " << generation << ": " << answer << std::endl;
+        // }
+        
+    }
+
+    // 在最终种群中找到最优解
+    std::sort(population.begin(), population.end(), [&](const std::vector<int>& a, const std::vector<int>& b) {
+        return fitness(a) > fitness(b);
+    });
+    // 返回最大适应度值
+    return answer;
+}
+
+// 遗传算法求解背包问题（多线程）
+int knapsackGeneticAlgorithmParallel(std::vector<Item>& items, int W, int populationSize, int generations, double crossoverRate, double mutationRate, int tournamentSize) {
+    // 初始化随机数生成器
+    std::mt19937 rng(std::time(0));
+    int answer = 0;
+    std::vector<std::vector<int>> population(populationSize, std::vector<int>(items.size()));
+
+    // 定义初始种群，随机生成
+    for (auto& individual : population) {
+        for (auto& gene : individual) {
+            gene = rng() % 2; // 随机赋值0或1
         }
+    }
+
+    // 适应度函数
+    auto fitness = [&](const std::vector<int>& individual) {
+        auto [total_weight, total_value] = calculateTotal(items, individual);
+        return total_weight <= W ? total_value : 0;
+    };
+
+    // 主循环
+    for (int generation = 0; generation < generations; ++generation) {
+        std::vector<int> fitnessResults(populationSize);
+        std::vector<std::thread> threads;
+
+        // 分割种群并在多个线程上并行计算适应度
+        int numThreads = std::thread::hardware_concurrency(); // 获取硬件线程数   
+        int chunkSize = populationSize / numThreads;
+        for (int i = 0; i < numThreads; ++i) {
+            int start = i * chunkSize;
+            int end = (i == numThreads - 1) ? populationSize : (i + 1) * chunkSize;
+            threads.emplace_back(evaluateFitnessParallel, std::ref(population), std::ref(fitnessResults), fitness, start, end);
+        }
+        // 等待所有线程完成
+        for (auto& t : threads) {
+            t.join();
+        }
+        std::vector<std::vector<int>> newPopulation;
+        for (int i = 0; i < populationSize; ++i) {
+            // 使用锦标赛选择机制选择父母
+            std::vector<int> parent1 = tournamentSelection(population, tournamentSize, fitness);
+            std::vector<int> parent2 = tournamentSelection(population, tournamentSize, fitness);
+            std::vector<int> child(items.size());
+
+            // 交叉
+            if (std::generate_canonical<double, 10>(rng) < crossoverRate) {
+                int crossoverPoint = rng() % items.size();
+                for (int j = 0; j < crossoverPoint; ++j) child[j] = parent1[j];
+                for (int j = crossoverPoint; j < items.size(); ++j) child[j] = parent2[j];
+            } else {
+                child = parent1; // 如果不交叉，子代直接继承父代1的基因
+            }
+
+            // 变异
+            for (int j = 0; j < items.size(); ++j) {
+                if (std::generate_canonical<double, 10>(rng) < mutationRate) {
+                    child[j] = 1 - child[j]; // 翻转基因
+                }
+            }
+
+            // 将新个体添加到新种群中
+            newPopulation.push_back(child);
+        }
+
+        // 用新种群替换旧种群
+        population = newPopulation;
+        std::sort(population.begin(), population.end(), [&](const std::vector<int>& a, const std::vector<int>& b) {
+             return fitness(a) > fitness(b);
+        });
+        answer = std::max(answer, fitness(population.front()));
+        // if (generation % 10 == 0) {
+        //     std::cout << "Generation " << generation << ": " << answer << std::endl;
+        // }
         
     }
 
